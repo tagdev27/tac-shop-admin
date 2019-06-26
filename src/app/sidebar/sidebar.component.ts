@@ -8,7 +8,6 @@ import { timer } from 'rxjs';
 import swal from 'sweetalert2';
 
 declare const $: any;
-const email = localStorage.getItem('email');
 
 //Metadata
 export interface RouteInfo {
@@ -16,7 +15,7 @@ export interface RouteInfo {
     title: string;
     type: string;
     icontype: string;
-    access:boolean;
+    access: boolean;
     collapse?: string;
     children?: ChildrenItems[];
 }
@@ -110,9 +109,9 @@ export const ROUTES: RouteInfo[] = [{
 export class SidebarComponent implements OnInit {
 
     user: AdminUsers
-    name:string = 'Username';
-    image:string = './assets/img/default-avatar.png';
-    role:string = 'user';
+    name: string = 'Username';
+    image: string = './assets/img/default-avatar.png';
+    role: string = 'user';
     access_level = '';
     service = new AdminUsersService();
 
@@ -121,16 +120,27 @@ export class SidebarComponent implements OnInit {
     }
 
     getProfile() {
+        const email = localStorage.getItem('email');
         this.service.getUserData(email).then(p => {
-            this.name = p.name;
-            this.image = p.image;
-            this.role = p.role;
-            this.access_level = p.access_levels;
-            this.displayNav();
+            if (p == null) {
+                this.service.getUserData(email).then(q => {
+                    this.name = q.name;
+                    this.image = q.image;
+                    this.role = q.role;
+                    this.access_level = q.access_levels;
+                    this.displayNav();
+                })
+            } else {
+                this.name = p.name;
+                this.image = p.image;
+                this.role = p.role;
+                this.access_level = p.access_levels;
+                this.displayNav();
+            }
         })
     }
 
-    logout(){
+    logout() {
         swal({
             title: 'Logout Alert',
             text: 'Are you sure about logging out?',
@@ -170,13 +180,13 @@ export class SidebarComponent implements OnInit {
 
     displayNav() {
         ROUTES.forEach(menuItem => {
-            if(menuItem.title == 'Dashboard'){
+            if (menuItem.title == 'Dashboard') {
                 this.menuItems.push(menuItem);
-            }else{
-                if(this.role == 'Administrator'){
+            } else {
+                if (this.role == 'Administrator') {
                     menuItem.access = true;
                     this.menuItems.push(menuItem);
-                }else{
+                } else {
                     menuItem.access = this.service.isAllowedAccess(this.access_level, menuItem.title);
                     this.menuItems.push(menuItem);
                 }

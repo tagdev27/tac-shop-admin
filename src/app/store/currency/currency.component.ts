@@ -30,7 +30,7 @@ export class CurrencyComponent implements OnInit, OnDestroy {
     cTitle = ''
     cName = ''
     cSymbol = ''
-    cRate = ''
+    cRate = 0
     currentCurrent: any
 
     constructor(private previewProgressSpinner: OverlayService){
@@ -135,7 +135,7 @@ export class CurrencyComponent implements OnInit, OnDestroy {
     }
 
     submitCurrency() {
-        if (this.cName == '' || this.cRate == '' || this.cSymbol == '' || this.cTitle == '') {
+        if (this.cName == '' || this.cRate == 0 || this.cSymbol == '' || this.cTitle == '') {
             this.config.displayMessage("Please enter all fields.", false)
             return
         }

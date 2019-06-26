@@ -173,7 +173,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
                     deleted: false,
                     meta: meta,
                     modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                    link: `/subcategories?id=${key}`
+                    link: `/subcategory/${key}`
                 }
                 firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').doc(key).set(category).then(d => {
                     this.config.logActivity(`${current_name}|${current_email} created this sub-category: ${name}`)

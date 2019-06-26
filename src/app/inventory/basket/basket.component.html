@@ -1,63 +1,227 @@
 <div class="main-content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                  <div class="card-header card-header-primary card-header-icon">
-                    <div class="card-icon">
-                      <i class="material-icons">assignment</i>
-                    </div>
-                    <h4 class="card-title">Main Categories</h4>
-                  </div>
-                    <div class="card-body">
-                        <div class="toolbar">
-                            <!--        Here you can write extra buttons/actions for the toolbar              -->
-                        </div>
-                        <div class="material-datatables">
-                          <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
-                                <thead>
-                                    <tr>
-                                      <th>{{ dataTable.headerRow[0] }}</th>
-                                      <th>{{ dataTable.headerRow[1] }}</th>
-                                      <th>{{ dataTable.headerRow[2] }}</th>
-                                      <th>{{ dataTable.headerRow[3] }}</th>
-                                      <th>{{ dataTable.headerRow[4] }}</th>
-                                      <th class="disabled-sorting text-right">{{ dataTable.headerRow[5] }}</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                      <th>{{ dataTable.footerRow[0] }}</th>
-                                      <th>{{ dataTable.footerRow[1] }}</th>
-                                      <th>{{ dataTable.footerRow[2] }}</th>
-                                      <th>{{ dataTable.footerRow[3] }}</th>
-                                      <th>{{ dataTable.footerRow[4] }}</th>
-                                      <th class="text-right">{{ dataTable.footerRow[5] }}</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    <tr *ngFor="let row of dataTable.dataRows">
-                                        <td>{{row[0]}}</td>
-                                        <td>{{row[1]}}</td>
-                                        <td>{{row[2]}}</td>
-                                        <td>{{row[3]}}</td>
-                                        <td>{{row[4]}}</td>
-                                        <td class="text-right">
-                                          <a href="javascript:void(0)" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">favorite</i></a>
-                                          <a href="javascript:void(0" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">dvr</i></a>
-                                          <a href="javascript:void(0s" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- end content-->
-                </div>
-                <!--  end card  -->
+  <div class="container-fluid">
+    <div class="row" *ngIf="!addNewPro">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-primary card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">assignment</i>
             </div>
-            <!-- end col-md-12 -->
+            <h4 class="card-title">Gift Baskets</h4>
+          </div>
+          <div class="td-actions">
+            <button mat-raised-button type="button" class="btn btn-primary btn-round" (click)="getProducts()">
+              View Active
+            </button>
+            <button mat-raised-button type="button" class="btn btn-primary btn-round" (click)="getDeletedProducts()">
+              View Deleted
+            </button>
+          </div>
+
+          <div class="td-actions text-right">
+            <button mat-raised-button type="button" class="btn btn-primary btn-round" (click)="addPro()">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="toolbar">
+              <!--        Here you can write extra buttons/actions for the toolbar              -->
+            </div>
+            <div class="material-datatables table-responsive">
+              <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0"
+                width="100%" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>{{ dataTable.headerRow[0] }}</th>
+                    <th>{{ dataTable.headerRow[1] }}</th>
+                    <th>{{ dataTable.headerRow[2] }}</th>
+                    <th>{{ dataTable.headerRow[3] }}</th>
+                    <th>{{ dataTable.headerRow[4] }}</th>
+                    <th>{{ dataTable.headerRow[5] }}</th>
+                    <th class="disabled-sorting text-right">{{ dataTable.headerRow[6] }}</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>{{ dataTable.footerRow[0] }}</th>
+                    <th>{{ dataTable.footerRow[1] }}</th>
+                    <th>{{ dataTable.footerRow[2] }}</th>
+                    <th>{{ dataTable.footerRow[3] }}</th>
+                    <th>{{ dataTable.footerRow[4] }}</th>
+                    <th>{{ dataTable.headerRow[5] }}</th>
+                    <th class="text-right">{{ dataTable.footerRow[6] }}</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr *ngFor="let row of dataTable.dataRows">
+                    <td>
+                      <div class="user">
+                        <div class="photo">
+                          <img src="{{row[1]}}" />
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{row[2]}}</td>
+                    <td>{{row[3]}}</td>
+                    <td>{{row[4]}}</td>
+                    <td>{{row[5]}}</td>
+                    <td>{{row[6]}}</td>
+                    <td class="text-right">
+                      <a href="javascript:void(0)" class="btn btn-link btn-info btn-just-icon like"
+                        (click)="restoreProClick(row[0])" *ngIf="isDeletedView"><i
+                          class="material-icons">favorite</i></a>
+                      <a href="javascript:void(0)" class="btn btn-link btn-warning btn-just-icon edit"
+                        (click)="editProClick(row[0])" *ngIf="!isDeletedView"><i class="material-icons">edit</i></a>
+                      <a href="javascript:void(0)" class="btn btn-link btn-danger btn-just-icon remove"
+                        (click)="deletePro(row[0])" *ngIf="!isDeletedView"><i class="material-icons">close</i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- end content-->
         </div>
-        <!-- end row -->
+        <!--  end card  -->
+      </div>
+      <!-- end col-md-12 -->
     </div>
+    <!-- end row -->
+    <div class="row" *ngIf="addNewPro">
+      <div class="col-md-12 ml-auto mr-auto">
+        <div class="card">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">mail_outline</i>
+            </div>
+            <h4 class="card-title">Create New Gift Basket</h4>
+          </div>
+          <div class="col-md-6 mr-auto text-center">
+            <div class="card-body">
+              <form method="#" action="#">
+                <legend>Gift Basket Image *</legend>
+                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                  <div class="fileinput-new thumbnail">
+                    <img src="{{basket_image}}" alt="...">
+                  </div>
+                  <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                  <div>
+                    <span class="btn btn-rose btn-round btn-file">
+                      <span class="fileinput-new">Select image</span>
+                      <span class="fileinput-exists">Change</span>
+                      <input type="file" name="..." id="pro_images" />
+                    </span>
+                    <a href="" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i
+                        class="fa fa-times"></i> Remove</a>
+                  </div>
+                </div>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Gift Basket Name *" type="text" name="bn" [(ngModel)]="basket_name">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Price *" type="number" id="cat_desc" name="price"
+                    [(ngModel)]="basket_price">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Sale Price" type="number" name="sp" [(ngModel)]="basket_sale_price">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Discount (in percent)" type="number" name="dis"
+                    [(ngModel)]="basket_discount">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Short Description *" type="text" name="sd" [(ngModel)]="basket_short_desc">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Full Description *" type="text" name="fd" [(ngModel)]="basket_full_desc">
+                </mat-form-field>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-md-6 ml-auto text-center">
+              <div class="card-body">
+                <form method="#" action="#">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Stock Level *" type="number" name="stk" [(ngModel)]="basket_stock">
+                  </mat-form-field>
+                  <mat-form-field>
+                      <mat-select placeholder="New Product *" [(ngModel)]="basket_new" name="new" ariaLabel="true_false_data[0]">
+                          <mat-option *ngFor="let bd of true_false_data"[value]="bd.value">
+                            {{bd.viewValue}}
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                      <mat-select placeholder="Sale Product *" [(ngModel)]="basket_sale" name="sale" ariaLabel="true_false_data[0]">
+                          <mat-option *ngFor="let bd of true_false_data"[value]="bd.value">
+                            {{bd.viewValue}}
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                      <mat-select placeholder="Basket Category *" multiple [(ngModel)]="basket_category" name="bmc" ariaLabel="sub_categories[0]">
+                          <mat-option *ngFor="let bd of sub_categories"[value]="bd.id">
+                            {{bd.name}}
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+
+
+                  <tag-input class="example-full-width" secondaryPlaceholder="Enter basket colors. Such as red | green | blue" editable="editable" [(ngModel)]='basket_colors' name="bc" theme='filled-theme'></tag-input>
+                  <tag-input [(ngModel)]='basket_sizes' secondaryPlaceholder="Enter basket sizes. Such as M | L | XL" editable="editable" name="bs" theme='filled-theme'></tag-input>
+                  <tag-input [(ngModel)]='basket_tags' secondaryPlaceholder="Enter basket tags." editable="editable" name="btg" theme='filled-theme'></tag-input>
+
+                  <tag-input [(ngModel)]='basket_items' [onlyFromAutocomplete]="true" secondaryPlaceholder="Enter basket items." name="btg3" theme='filled-theme'>
+                    <tag-input-dropdown [autocompleteItems]="tag_items">
+                    </tag-input-dropdown>
+                  </tag-input>
+                  <br>
+                  <!-- <mat-form-field>
+                      <mat-select placeholder="Basket Items *" multiple [(ngModel)]="basket_items" name="bi" ariaLabel="items[0]">
+                          <mat-option *ngFor="let bd of items"[value]="bd.id">
+                            {{bd.name}}
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field> -->
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Weight (in Kg)" type="number" name="weight"
+                      [(ngModel)]="basket_weight">
+                  </mat-form-field>
+                  <mat-form-field >
+                      <input matInput [matDatepicker]="picker" placeholder="Choose a start date for sale period" (click)="picker.open()" name="start"
+                      [(ngModel)]="basket_sale_start_date">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field >
+                        <input matInput [matDatepicker]="picker2" placeholder="Choose an end date for sale period" (click)="picker2.open()" name="end"
+                        [(ngModel)]="basket_sale_end_date">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                      </mat-form-field>
+  
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Dynamic Link" type="url" disabled name="dyLink"
+                      [(ngModel)]="basket_dynamic_link">
+                  </mat-form-field>
+                </form>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card-footer ">
+            <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+              (click)="productSubmitClicked()">Submit</button>
+            <button mat-raised-button type="submit" class="btn btn-fill btn-danger"
+              (click)="cancelAddPro()">Cancel</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>

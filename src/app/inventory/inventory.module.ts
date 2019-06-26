@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../app.module';
 
+import { TagInputModule } from 'ngx-chips';
+
 import { InventoryRoutes } from './inventory.routing';
 import { BasketComponent } from './basket/basket.component';
 import { CategoryComponent } from './category/category.component';
@@ -15,7 +17,8 @@ import { ItemsComponent } from './items/items.component';
     CommonModule,
     RouterModule.forChild(InventoryRoutes),
     FormsModule,
-    MaterialModule
+    MaterialModule,
+    TagInputModule
   ],
   declarations: [
       BasketComponent,

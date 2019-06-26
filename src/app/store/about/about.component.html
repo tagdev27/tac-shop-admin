@@ -12,12 +12,34 @@
                         <div class="card-body ">
                             <form method="#" action="#">
                                 <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Tax Value in Percent" type="number" name="tax" [(ngModel)]="tax">
+                                    <input matInput placeholder="Office Address" type="text" name="address" [(ngModel)]="address">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Email Address" type="email" name="email" [(ngModel)]="email">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Phone Number" type="number" name="number" [(ngModel)]="number">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Fax Number" type="number" name="fax" [(ngModel)]="fax">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Short Description about TAC" type="text" name="desc" [(ngModel)]="desc">
+                                </mat-form-field>
+                                <h4 class="card-title">Social Media Accounts</h4>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Facebook Url" type="url" name="facebook" [(ngModel)]="facebook">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Instagram Url" type="url" name="instagram" [(ngModel)]="instagram">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Twitter Url" type="url" name="twitter" [(ngModel)]="twitter">
                                 </mat-form-field>
                             </form>
                         </div>
                         <div class="card-footer ">
-                            <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="setTax()">Submit</button>
+                            <button mat-raised-button type="submit" class="btn btn-fill btn-rose" (click)="setAbout()">Submit</button>
                         </div>
                     </div>
                 </div>
