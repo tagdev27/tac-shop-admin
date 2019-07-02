@@ -9,4 +9,5 @@ export interface MainCategory {
     meta:string
     modified_date:string
     link:string
+    merchant:string
 }

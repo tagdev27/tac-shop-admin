@@ -4,6 +4,7 @@ import { BasketComponent } from './basket/basket.component';
 import { CategoryComponent } from './category/category.component';
 import { SubCatComponent } from './subcat/subcat.component';
 import { ItemsComponent } from './items/items.component';
+import { RouteGuard } from '../route.guard';
 
 
 export const InventoryRoutes: Routes = [

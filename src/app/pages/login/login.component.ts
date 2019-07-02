@@ -82,21 +82,26 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         if (checkBox) {
             firebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
+                //console.log(user)
                 this.adminService.getUserData(email).then(ud => {
+                    //console.log(ud)
                     if (ud == null) {
                         firebase.auth().signOut()
                         this.displayMessage('User does not exist.', false)
                         return
                     }
                     if (ud.blocked) {
+                        firebase.auth().signOut()
                         this.displayMessage('Your account has been blocked. Please contact your Admin.', false)
                         return
                     }
+                    localStorage.setItem('logged', 'true');
                     localStorage.setItem('email', email);
                     localStorage.setItem('name', ud.name);
                     localStorage.setItem('dp', ud.image);
                     this.login_pressed = false;
                     this.router.navigate(['/dashboard'])
+                    //location.reload(true)
                 }).catch(err => {
                     firebase.auth().signOut()
                     this.displayMessage(`${err}`, false)
@@ -115,6 +120,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     return
                 }
                 if (ud.blocked) {
+                    firebase.auth().signOut()
                     this.displayMessage('Your account has been blocked. Please contact your Admin.', false)
                     return
                 }

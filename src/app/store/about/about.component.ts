@@ -30,6 +30,7 @@ export class AboutComponent implements OnInit, OnDestroy {
     facebook: string = ''
     instagram: string = ''
     twitter: string = ''
+    stock_level:number = 0
 
     settings: StoreSettings
 
@@ -51,6 +52,7 @@ export class AboutComponent implements OnInit, OnDestroy {
             this.facebook = this.settings.facebook_url
             this.instagram = this.settings.instagram_url
             this.twitter = this.settings.twitter_url
+            this.stock_level = this.settings.stock_level
         })
     }
 
@@ -86,7 +88,8 @@ export class AboutComponent implements OnInit, OnDestroy {
             description: this.desc,
             facebook_url: this.facebook,
             instagram_url: this.instagram,
-            twitter_url: this.twitter
+            twitter_url: this.twitter,
+            stock_level: this.stock_level
         }
         firebase.firestore().collection('db').doc('tacadmin').collection('settings').doc('store').set(setting).then(snap => {
             this.previewProgressSpinner.close()

@@ -70,6 +70,9 @@
                       <a href="javascript:void(0)" class="btn btn-link btn-info btn-just-icon like"
                         (click)="restoreProClick(row[0])" *ngIf="isDeletedView"><i
                           class="material-icons">favorite</i></a>
+                          <a href="javascript:void(0)" (click)="copyLink(row[0])" class="btn btn-link btn-info btn-just-icon like"
+                         *ngIf="!isDeletedView"><i
+                          class="material-icons">link</i></a>
                       <a href="javascript:void(0)" class="btn btn-link btn-warning btn-just-icon edit"
                         (click)="editProClick(row[0])" *ngIf="!isDeletedView"><i class="material-icons">edit</i></a>
                       <a href="javascript:void(0)" class="btn btn-link btn-danger btn-just-icon remove"
@@ -99,7 +102,7 @@
           <div class="col-md-6 mr-auto text-center">
             <div class="card-body">
               <form method="#" action="#">
-                <legend>Gift Basket Image *</legend>
+                <legend>Gift Basket Image (736 × 1000) *</legend>
                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                   <div class="fileinput-new thumbnail">
                     <img src="{{basket_image}}" alt="...">
@@ -123,7 +126,7 @@
                     [(ngModel)]="basket_price">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Sale Price" type="number" name="sp" [(ngModel)]="basket_sale_price">
+                  <input matInput placeholder="Discount Price" type="number" name="sp" [(ngModel)]="basket_sale_price">
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
@@ -134,7 +137,7 @@
                   <input matInput placeholder="Short Description *" type="text" name="sd" [(ngModel)]="basket_short_desc">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Full Description *" type="text" name="fd" [(ngModel)]="basket_full_desc">
+                  <textarea matInput placeholder="Full Description *" rows="5" type="text" name="fd" [(ngModel)]="basket_full_desc"></textarea>
                 </mat-form-field>
               </form>
             </div>
@@ -148,13 +151,13 @@
                   </mat-form-field>
                   <mat-form-field>
                       <mat-select placeholder="New Product *" [(ngModel)]="basket_new" name="new" ariaLabel="true_false_data[0]">
-                          <mat-option *ngFor="let bd of true_false_data"[value]="bd.value">
+                          <mat-option *ngFor="let bd of true_false_data" [value]="bd.value">
                             {{bd.viewValue}}
                           </mat-option>
                       </mat-select>
                   </mat-form-field>
                   <mat-form-field>
-                      <mat-select placeholder="Sale Product *" [(ngModel)]="basket_sale" name="sale" ariaLabel="true_false_data[0]">
+                      <mat-select placeholder="Discount Product *" [(ngModel)]="basket_sale" name="sale" ariaLabel="true_false_data[0]">
                           <mat-option *ngFor="let bd of true_false_data"[value]="bd.value">
                             {{bd.viewValue}}
                           </mat-option>
@@ -189,13 +192,13 @@
                     <input matInput placeholder="Weight (in Kg)" type="number" name="weight"
                       [(ngModel)]="basket_weight">
                   </mat-form-field>
-                  <mat-form-field >
+                  <mat-form-field *ngIf="basket_sale == 'false'">
                       <input matInput [matDatepicker]="picker" placeholder="Choose a start date for sale period" (click)="picker.open()" name="start"
                       [(ngModel)]="basket_sale_start_date">
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
-                    <mat-form-field >
+                    <mat-form-field *ngIf="basket_sale == 'false'">
                         <input matInput [matDatepicker]="picker2" placeholder="Choose an end date for sale period" (click)="picker2.open()" name="end"
                         [(ngModel)]="basket_sale_end_date">
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>

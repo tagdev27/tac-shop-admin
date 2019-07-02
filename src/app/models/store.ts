@@ -7,4 +7,5 @@ export interface StoreSettings {
     facebook_url:string
     instagram_url:string
     twitter_url:string
+    stock_level:number
 }

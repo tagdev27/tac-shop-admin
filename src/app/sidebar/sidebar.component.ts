@@ -6,6 +6,9 @@ import * as firebase from "firebase";
 import { Router } from '@angular/router';
 import { timer } from 'rxjs';
 import swal from 'sweetalert2';
+import { StoreSettings } from '../models/store';
+import { AppConfig } from '../services/global.service';
+import { Product } from '../models/product';
 
 declare const $: any;
 
@@ -56,7 +59,7 @@ export const ROUTES: RouteInfo[] = [{
     access: false,
     children: [
         { path: 'orders', title: 'Paid Orders', ab: 'PO' },
-        { path: 'catorders', title: 'Orders in Cart', ab: 'OC' },
+        { path: 'cartorders', title: 'Orders in Cart', ab: 'OC' },
         { path: 'invoice', title: 'Invoice', ab: 'I' },
         { path: 'report', title: 'Report', ab: 'R' }
     ]
@@ -69,7 +72,7 @@ export const ROUTES: RouteInfo[] = [{
     access: false,
     children: [
         { path: 'banners', title: 'Banners', ab: 'B' },
-        { path: 'newsletter', title: 'Newsletter', ab: 'N' }
+        { path: 'gift-messages', title: 'Gift Messages', ab: 'GM' }
     ]
 }, {
     path: '/store',
@@ -114,6 +117,11 @@ export class SidebarComponent implements OnInit {
     role: string = 'user';
     access_level = '';
     service = new AdminUsersService();
+
+    stock_alerts:string[] = []
+    settings: StoreSettings
+    config = new AppConfig()
+    notification_size = 0
 
     constructor(private router: Router) {
         this.getProfile();
@@ -187,6 +195,7 @@ export class SidebarComponent implements OnInit {
                     menuItem.access = true;
                     this.menuItems.push(menuItem);
                 } else {
+                    //console.log(`Access to ${menuItem.title} is ${this.service.isAllowedAccess(this.access_level, menuItem.title)}`)
                     menuItem.access = this.service.isAllowedAccess(this.access_level, menuItem.title);
                     this.menuItems.push(menuItem);
                 }
@@ -200,6 +209,7 @@ export class SidebarComponent implements OnInit {
             const elemSidebar = <HTMLElement>document.querySelector('.sidebar .sidebar-wrapper');
             this.ps = new PerfectScrollbar(elemSidebar);
         }
+        this.getStockAlert()
     }
     updatePS(): void {
         if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
@@ -212,5 +222,29 @@ export class SidebarComponent implements OnInit {
             bool = true;
         }
         return bool;
+    }
+
+    gotoLink(menu_path, child_path) {
+        if (this.role == 'Administrator') {
+            this.router.navigate([`${menu_path}/${child_path}`])
+        } else {
+            location.href = `${menu_path}/${child_path}`
+        }
+    }
+
+    getStockAlert() {
+        firebase.firestore().collection('db').doc('tacadmin').collection('settings').doc('store').get().then(snap => {
+            this.stock_alerts = []
+            this.settings = <StoreSettings>snap.data()
+            firebase.firestore().collection('db').doc('tacadmin').collection('products').where("stock", "<=", this.settings.stock_level).get().then(query => {
+                this.notification_size = query.size
+                if(query != null){
+                    query.forEach(data => {
+                        const pro = <Product>data.data()
+                        this.stock_alerts.push(`Product ${pro.name} has ${pro.stock} items left in stock`)
+                    })
+                }
+            })
+        })
     }
 }

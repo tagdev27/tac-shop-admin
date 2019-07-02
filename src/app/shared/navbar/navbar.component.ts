@@ -5,6 +5,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import * as firebase from "firebase";
 import swal from 'sweetalert2';
+import { StoreSettings } from 'src/app/models/store';
+import { AppConfig } from 'src/app/services/global.service';
+import { Product } from 'src/app/models/product';
 const misc: any = {
     navbar_menu_visible: 0,
     active_collapse: true,
@@ -25,6 +28,11 @@ export class NavbarComponent implements OnInit {
     private toggleButton: any;
     private sidebarVisible: boolean;
     private _router: Subscription;
+
+    stock_alerts:string[] = []
+    settings: StoreSettings
+    config = new AppConfig()
+    notification_size = 0
 
     @ViewChild('app-navbar-cmp', {static: false}) button: any;
 
@@ -111,6 +119,7 @@ export class NavbarComponent implements OnInit {
             $layer.remove();
           }
         });
+        this.getStockAlert()
     }
     onResize(event) {
       if ($(window).width() > 991) {
@@ -240,5 +249,21 @@ export class NavbarComponent implements OnInit {
     }
     getPath() {
         return this.location.prepareExternalUrl(this.location.path());
+    }
+
+    getStockAlert() {
+        firebase.firestore().collection('db').doc('tacadmin').collection('settings').doc('store').get().then(snap => {
+            this.stock_alerts = []
+            this.settings = <StoreSettings>snap.data()
+            firebase.firestore().collection('db').doc('tacadmin').collection('products').where("stock", "<=", this.settings.stock_level).get().then(query => {
+                this.notification_size = query.size
+                if(query != null){
+                    query.forEach(data => {
+                        const pro = <Product>data.data()
+                        this.stock_alerts.push(`Product ${pro.name} has ${pro.stock} items left in stock`)
+                    })
+                }
+            })
+        })
     }
 }

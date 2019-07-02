@@ -10,4 +10,5 @@ export interface SubCategory {
     meta:string
     modified_date:string
     link:string
+    merchant:string
 }

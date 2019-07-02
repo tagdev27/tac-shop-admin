@@ -30,36 +30,38 @@ export class AppComponent implements OnInit {
         localStorage.setItem('logged', 'true');
       } else {
         localStorage.setItem('logged', 'false');
-        if(this.isLogout){
+        if (this.isLogout) {
           this.logUserOut(true)
-        }else{
+        } else {
           this.logUserOut(false)
         }
       }
     });
   }
 
-  checkblockeduser(){
+  checkblockeduser() {
     this.email = localStorage.getItem('email');
     if (this.email == null) {
       return
     }
     firebase.firestore().collection('db').doc('tacadmin').collection('users').doc(this.email).onSnapshot(user => {
       const m = <AdminUsers>user.data()
-      const blocked:boolean = m.blocked
-      if(blocked){
-        this.logUserOut(true)
+      if (m != null) {
+        const blocked: boolean = m.blocked
+        if (blocked) {
+          this.logUserOut(true)
+        }
       }
     })
   }
 
-  logUserOut(clearAll:boolean){
-    if(clearAll){
+  logUserOut(clearAll: boolean) {
+    if (clearAll) {
       this.isLoggedIn = false;
       firebase.auth().signOut();
       localStorage.clear();
       this.router.navigate(['/pages/login'])
-    }else {
+    } else {
       this.isLoggedIn = false;
       firebase.auth().signOut();
       this.router.navigate(['/pages/lock'])
@@ -78,7 +80,7 @@ export class AppComponent implements OnInit {
       appId: "1:640531224553:web:1841f3f75b6240af"
     };
     firebase.initializeApp(firebaseConfig);
-    
+
     this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
       const body = document.getElementsByTagName('body')[0];
       const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0];
@@ -100,7 +102,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  stopWatching(){
+  stopWatching() {
     this.userIdle.stopTimer();
     this.userIdle.stopWatching();
   }

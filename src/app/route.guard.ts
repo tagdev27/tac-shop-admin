@@ -1,7 +1,9 @@
-import { CanActivate } from "@angular/router";
+import { CanActivate, ActivatedRoute } from "@angular/router";
 import { AdminUsersService } from "./services/admin-users.service";
 
 export class RouteGuard implements CanActivate {
+
+    // /constructor(private router:ActivatedRoute){}
 
     service = new AdminUsersService();
 
@@ -11,18 +13,18 @@ export class RouteGuard implements CanActivate {
             return false
         } else {
             const p = await this.service.getUserData(email)
+            //console.log(`from route = ${p.access_levels}`)
             const levels = p.access_levels.toLowerCase()
             const current_menu = window.location.href.toLowerCase().split("/")[3]
 
             if(p.role == 'Administrator'){
                 return true
             }else{
+                //console.log(`from route allow = ${this.service.isAllowedAccess(levels, current_menu)}`)
                 return this.service.isAllowedAccess(levels, current_menu)
             }
         }
-
     }
-
 }
 
 export class LoginRouteGuard implements CanActivate {

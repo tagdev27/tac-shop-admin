@@ -79,7 +79,7 @@ export class CurrencyComponent implements OnInit, OnDestroy {
         this.cTitle = ''
         this.cName = ''
         this.cSymbol = ''
-        this.cRate = ''
+        this.cRate = 0
     }
 
     editCurr(curr: any) {

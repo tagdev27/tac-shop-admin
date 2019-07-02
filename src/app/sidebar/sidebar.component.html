@@ -71,17 +71,17 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link" href="#pablo" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="material-icons">notifications</i>
-                    <span class="notification">5</span>
+                    <span class="notification">{{notification_size}}</span>
                     <p>
                       <span class="d-lg-none d-md-block">Some Actions</span>
                     </p>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">Mike John responded to your email</a>
-                    <a class="dropdown-item" href="#">You have 5 new tasks</a>
+                    <a class="dropdown-item" href="javascript:void(0)" *ngFor="let notify of stock_alerts">{{notify}}</a>
+                    <!-- <a class="dropdown-item" href="#">You have 5 new tasks</a>
                     <a class="dropdown-item" href="#">You're now friend with Andrew</a>
                     <a class="dropdown-item" href="#">Another Notification</a>
-                    <a class="dropdown-item" href="#">Another One</a>
+                    <a class="dropdown-item" href="#">Another One</a> -->
                   </div>
                 </li>
                 <li class="nav-item">
@@ -111,7 +111,7 @@
                     <div id="{{menuitem.collapse}}" class="collapse" *ngIf="menuitem.type === 'sub' && menuitem.access">
                         <ul class="nav">
                             <li routerLinkActive="active" *ngFor="let childitem of menuitem.children" class="nav-item">
-                                <a [routerLink]="[menuitem.path, childitem.path]" class="nav-link">
+                                <a href="javascript:void(0)" (click)="gotoLink(menuitem.path, childitem.path)" class="nav-link">
                                     <span class="sidebar-mini">{{childitem.ab}}</span>
                                     <span class="sidebar-normal">{{childitem.title}}</span>
                                 </a>
@@ -119,6 +119,7 @@
                         </ul>
                     </div>
                 </li>
+                <!-- [routerLink]="[menuitem.path, childitem.path]" -->
                 <!-- <li class="nav-item">
                     <a href="http://md-pro-angular.creative-tim.com/documentation/tutorial?ref=md-pro-archive" class="nav-link">
                         <i class="material-icons">school</i>

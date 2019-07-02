@@ -144,7 +144,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
                     stock_level: stock,
                     price: price,
                     modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                    link: `/item/${key}`
+                    link: `/item/${key}`,
+                    merchant: 'tac'
                 }
                 firebase.firestore().collection('db').doc('tacadmin').collection('items').doc(key).set(category).then(d => {
                     this.config.logActivity(`${current_name}|${current_email} created this items: ${name}`)

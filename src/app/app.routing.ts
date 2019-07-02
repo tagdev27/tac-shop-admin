@@ -15,7 +15,7 @@ export const AppRoutes: Routes = [
     {
       path: '',
       component: AdminLayoutComponent,
-      canActivate: [RouteGuard],
+      //canActivate: [RouteGuard],
       children: [
           {
         path: '',
@@ -59,6 +59,21 @@ export const AppRoutes: Routes = [
         path: 'logs',
         canActivate: [RouteGuard],
         loadChildren: './logs/logs.module#LogsModule'
+    },
+    {
+        path: 'users',
+        canActivate: [RouteGuard],
+        loadChildren: './users/users.module#UsersModule'
+    },
+    {
+        path: 'sales',
+        canActivate: [RouteGuard],
+        loadChildren: './sales/sales.module#SalesModule'
+    },
+    {
+        path: 'marketing',
+        canActivate: [RouteGuard],
+        loadChildren: './marketing/marketing.module#MarketingModule'
     },
     {
         path: '',

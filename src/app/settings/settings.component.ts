@@ -165,7 +165,7 @@ export class SettingsComponent implements OnInit {
       access_levels: searchedRole[0].access_levels,
       blocked: false,
       email: email,
-      image: './assets/img/default-avatar.png',
+      image: 'https://tacadmin.firebaseapp.com/assets/img/default-avatar.png',
       name:name,
       position:position,
       role:this.accountRole

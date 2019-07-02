@@ -141,7 +141,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
                     deleted: false,
                     meta: meta,
                     modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                    link: `/collection/${key}`
+                    link: `/collection/${key}`,
+                    merchant: 'tac'
                 }
                 firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').doc(key).set(category).then(d => {
                     this.config.logActivity(`${current_name}|${current_email} created this category: ${name}`)

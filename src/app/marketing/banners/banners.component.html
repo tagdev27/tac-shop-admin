@@ -1,0 +1,374 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Slider One Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <legend>Slider One Image (1920 x 718)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{slider1_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="slider1" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="st1" [(ngModel)]="slider1_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="SubTitle" type="text" name="sst1"
+                                    [(ngModel)]="slider1_subtitle">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setSliderOne()">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Slider Two Settings</h4>
+                    </div>
+                    <div class="card-body ">
+                        <form method="#" action="#">
+                            <legend>Slider Two Image (1920 x 718)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{slider2_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="slider2" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="st2" [(ngModel)]="slider2_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="SubTitle" type="text" name="sst2"
+                                    [(ngModel)]="slider2_subtitle">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setSliderTwo()">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Parallax Settings</h4>
+                    </div>
+                    <div class="card-body ">
+                        <form method="#" action="#">
+                            <legend>Parallax Image (1920 x 1080)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{parallax_banner_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="parallax" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="parallaxt"
+                                    [(ngModel)]="parallax_banner_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="SubTitle" type="text" name="parallaxst"
+                                    [(ngModel)]="parallax_banner_sub_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Third Line Text" type="text" name="parallaxlt"
+                                    [(ngModel)]="parallax_banner_last_text">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setParallax()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Grid One Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <legend>Grid One Image (672 x 310)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{grid1_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="grid1" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="gt1" [(ngModel)]="grid1_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="SubTitle" type="text" name="gst1"
+                                    [(ngModel)]="grid1_subtitle">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setGridOne()">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Grid Two Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <legend>Grid Two Image (672 x 310)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{grid2_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="grid2" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="gt2" [(ngModel)]="grid2_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="SubTitle" type="text" name="gst2"
+                                    [(ngModel)]="grid2_subtitle">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setGridTwo()">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Grid Three Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <legend>Grid Three Image (672 x 310)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{grid3_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="grid3" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="gt3" [(ngModel)]="grid3_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="SubTitle" type="text" name="gst3"
+                                    [(ngModel)]="grid3_subtitle">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setGridThree()">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Grid Four Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <legend>Grid Four Image (672 x 310)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{grid4_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="grid4" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="gt4" [(ngModel)]="grid4_title">
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="SubTitle" type="text" name="gst4"
+                                    [(ngModel)]="grid4_subtitle">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setGridFour()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Collection Page Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <legend>Collection Page Image (1370 x 385)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{collection_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="collection" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Collection Text" type="text" name="c1"
+                                    [(ngModel)]="collection_text">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setCollection()">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">SideBar Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <legend>SideBar Image (295 x 446)</legend>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{sidebar_image}}" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-rose btn-round btn-file">
+                                        <span class="fileinput-new">Select image</span>
+                                        <span class="fileinput-exists">Change</span>
+                                        <input type="file" name="..." id="sidebar" />
+                                    </span>
+                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                        data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setSideBar()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AppOverlayModule } from './overlay/overlay.module';
 import { ProgressSpinnerModule,ProgressSpinnerComponent } from './progress-spinner/progress-spinner.module';
+import { ToastrModule } from 'ngx-toastr';
 
 import {
   MatAutocompleteModule,
@@ -98,6 +99,7 @@ export class MaterialModule {}
     imports:      [
         CommonModule,
         BrowserAnimationsModule,
+        ToastrModule.forRoot(),
         FormsModule,
         RouterModule.forRoot(AppRoutes,{
           useHash: false
@@ -123,6 +125,7 @@ export class MaterialModule {}
         AdminLayoutComponent,
         AuthLayoutComponent
     ],
-    bootstrap:    [ AppComponent ]
+    bootstrap:    [ AppComponent ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

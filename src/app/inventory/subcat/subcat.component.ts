@@ -31,7 +31,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
     config = new AppConfig()
     data: string[][] = []
     categories: SubCategory[] = []
-    main_categories:MainCategory[] = []
+    main_categories: MainCategory[] = []
 
     newMainCategory = ''
     editMainCategory = ''
@@ -57,8 +57,8 @@ export class SubCatComponent implements OnInit, OnDestroy {
         // };
     }
 
-    async getMainCategoryNameFromId(id:string){
-        const mainData:firebase.firestore.DocumentSnapshot = await firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').doc(id).get()
+    async getMainCategoryNameFromId(id: string) {
+        const mainData: firebase.firestore.DocumentSnapshot = await firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').doc(id).get()
         return <MainCategory>mainData.data()
     }
 
@@ -114,7 +114,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
             var index = 0
             query.forEach(data => {
                 const category = <MainCategory>data.data()
-                if(!category.deleted){
+                if (!category.deleted) {
                     this.main_categories.push(category)
                 }
             })
@@ -143,45 +143,24 @@ export class SubCatComponent implements OnInit, OnDestroy {
         const meta = (<HTMLInputElement>document.getElementById("cat_meta")).value;
         const image = (<HTMLInputElement>document.getElementById("cat_image")).files
 
-        if (name == '' || meta == '' || image.length == 0 || this.newMainCategory == '') {
-            this.config.displayMessage("Please enter all fields and select an image", false)
+        if (name == '' || meta == '' || this.newMainCategory == '') {
+            this.config.displayMessage("Please enter all fields", false)
             return
         }
 
         const mc = this.newMainCategory
-        const selectedMain = this.main_categories.filter(function(item, index, array){
+        const selectedMain = this.main_categories.filter(function (item, index, array) {
             return item.name == mc
         })
 
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
 
-        const upload_task = firebase.storage().ref("sub-category").child(image.item(0).name)
+        if (image.length > 0) {
+            const upload_task = firebase.storage().ref("sub-category").child(image.item(0).name)
 
-        upload_task.put(image.item(0)).then(task => {
-            const key = firebase.database().ref().push().key
-            const current_email = localStorage.getItem('email')
-            const current_name = localStorage.getItem('name')
-            upload_task.getDownloadURL().then(url => {
-                const category: SubCategory = {
-                    id: key,
-                    main_category_id: selectedMain[0].id,
-                    name: name,
-                    description: desc,
-                    created_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                    created_by: `${current_name}|${current_email}`,
-                    image: url,
-                    deleted: false,
-                    meta: meta,
-                    modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                    link: `/subcategory/${key}`
-                }
-                firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').doc(key).set(category).then(d => {
-                    this.config.logActivity(`${current_name}|${current_email} created this sub-category: ${name}`)
-                    this.previewProgressSpinner.close()
-                    this.config.displayMessage(`Sub-Category created successfully.`, true);
-                    this.addNewCat = false
-                    this.addNewCat2 = false
-                    this.editCat = false
+            upload_task.put(image.item(0)).then(task => {
+                upload_task.getDownloadURL().then(url => {
+                    this.uploadCatData(selectedMain, url, desc, meta)
                 }).catch(err => {
                     this.previewProgressSpinner.close()
                     this.config.displayMessage(`${err}`, false);
@@ -190,13 +169,43 @@ export class SubCatComponent implements OnInit, OnDestroy {
                 this.previewProgressSpinner.close()
                 this.config.displayMessage(`${err}`, false);
             })
+        } else {
+            this.uploadCatData(selectedMain, 'https://tacadmin.firebaseapp.com/assets/img/image_placeholder.jpg', desc, meta)
+        }
+    }
+
+    uploadCatData(selectedMain: MainCategory[], url: string, desc: string, meta: string) {
+        const key = firebase.database().ref().push().key
+        const current_email = localStorage.getItem('email')
+        const current_name = localStorage.getItem('name')
+        const category: SubCategory = {
+            id: key,
+            main_category_id: selectedMain[0].id,
+            name: name,
+            description: desc,
+            created_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+            created_by: `${current_name}|${current_email}`,
+            image: url,
+            deleted: false,
+            meta: meta,
+            modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+            link: `/subcategory/${key}`,
+            merchant: 'tac'
+        }
+        firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').doc(key).set(category).then(d => {
+            this.config.logActivity(`${current_name}|${current_email} created this sub-category: ${name}`)
+            this.previewProgressSpinner.close()
+            this.config.displayMessage(`Sub-Category created successfully.`, true);
+            this.addNewCat = false
+            this.addNewCat2 = false
+            this.editCat = false
         }).catch(err => {
             this.previewProgressSpinner.close()
             this.config.displayMessage(`${err}`, false);
         })
     }
 
-    restoreCatClick(cat:any){
+    restoreCatClick(cat: any) {
         const id = `${cat[0]}`
         swal({
             title: 'Restore Alert',
@@ -291,7 +300,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
         }
 
         const mc = this.editMainCategory
-        const selectedMain = this.main_categories.filter(function(item, index, array){
+        const selectedMain = this.main_categories.filter(function (item, index, array) {
             return item.name == mc
         })
 

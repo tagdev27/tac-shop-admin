@@ -12,21 +12,19 @@ import { DateAdapter } from '@angular/material';
 import { OverlayService } from '../../overlay/overlay.module';
 import { ProgressSpinnerComponent } from '../../progress-spinner/progress-spinner.module';
 
-import { Product, ProductColor, ProductSize, ProductTags } from "src/app/models/product";
+import { Product, Item, ProductColor, ProductSize, ProductTags } from "src/app/models/product";
 import { AppConfig } from "src/app/services/global.service";
 import { MainCategory } from 'src/app/models/main.category';
 import { SubCategory } from 'src/app/models/sub.category';
 import { Items } from 'src/app/models/items';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { ClipboardService } from 'ngx-clipboard'
 
 declare interface DataTable {
     headerRow: string[];
     footerRow: string[];
     dataRows: string[][];
-}
-
-declare interface TagItems {
-    display: string;
-    value: string;
 }
 
 @Component({
@@ -37,7 +35,7 @@ declare interface TagItems {
 
 export class BasketComponent implements OnInit, OnDestroy {
 
-    constructor(private previewProgressSpinner: OverlayService) { }
+    constructor(private previewProgressSpinner: OverlayService, private http: HttpClient, private toast:ToastrService, private clip:ClipboardService) { }
 
     public dataTable: DataTable;
     config = new AppConfig()
@@ -64,18 +62,18 @@ export class BasketComponent implements OnInit, OnDestroy {
     basket_full_desc = ''
     basket_stock = 0
     basket_new = ''
-    basket_sale = ''
+    basket_sale = 'false'
     basket_category: string[] = []
     basket_colors: string[] = ['red', 'green', 'blue']
     basket_sizes: string[] = ['M', 'L', 'XL']
     basket_tags: string[] = ['wine', 'basket', 'gift']
-    basket_items: string[] = []
+    basket_items: Item[] = []
     basket_weight = 0
     basket_sale_start_date = ''
     basket_sale_end_date = ''
     basket_dynamic_link = ''
 
-    tag_items: TagItems[] = []
+    tag_items: Item[] = []
 
     true_false_data = [
         { value: 'false', viewValue: 'False' },
@@ -83,11 +81,11 @@ export class BasketComponent implements OnInit, OnDestroy {
     ]
     ///////////////////////
 
-    getDiscount(){
+    getDiscount() {
         return ((this.basket_price - this.basket_sale_price) * 100) / this.basket_sale_price
     }
 
-    clearField(){
+    clearField() {
         this.basket_image = './assets/img/image_placeholder.jpg'
         this.basket_name = ''
         this.basket_price = 0
@@ -97,7 +95,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         this.basket_full_desc = ''
         this.basket_stock = 0
         this.basket_new = ''
-        this.basket_sale = ''
+        this.basket_sale = 'false'
         this.basket_category = []
         this.basket_colors = ['red', 'green', 'blue']
         this.basket_sizes = ['M', 'L', 'XL']
@@ -141,7 +139,7 @@ export class BasketComponent implements OnInit, OnDestroy {
             query.forEach(data => {
                 const pro = <Product>data.data()
                 this.products.push(pro)
-                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link'])
+                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link', pro.dynamic_link])
                 index = index + 1
             })
             this.dataTable = {
@@ -189,7 +187,7 @@ export class BasketComponent implements OnInit, OnDestroy {
             var index = 0
             query.forEach(data => {
                 const it = <Items>data.data()
-                this.tag_items.push({display: it.name, value: it.id})
+                this.tag_items.push({ display: it.name, value: it.image, id: it.id })
                 this.items.push(it)
             })
         });
@@ -233,13 +231,14 @@ export class BasketComponent implements OnInit, OnDestroy {
                 const id = this.randomInt(0, 9999999999)
                 const current_email = localStorage.getItem('email')
                 const current_name = localStorage.getItem('name')
-                upload_task.getDownloadURL().then(url => {
+                upload_task.getDownloadURL().then(async url => {
+                    const dynamic_link = await this.createDynamicLink(`https://tac.ng/home/left-sidebar/product/${id}`, url)
                     const product: Product = {
                         id: id,
                         key: key,
                         name: this.basket_name,
-                        price: this.basket_price,
-                        salePrice: this.basket_sale_price,
+                        price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
+                        salePrice: (this.basket_sale == 'true') ? this.basket_price : this.basket_sale_price,
                         discount: this.basket_discount,
                         pictures: [url],
                         shortDetails: this.basket_short_desc,
@@ -260,8 +259,9 @@ export class BasketComponent implements OnInit, OnDestroy {
                         deleted: false,
                         modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
                         menu_link: `/product/${id}`,
-                        dynamic_link: ``,
-                        rating: 0.0
+                        dynamic_link: dynamic_link['shortLink'],
+                        rating: 5.0,
+                        merchant: 'tac'
                     }
                     firebase.firestore().collection('db').doc('tacadmin').collection('products').doc(key).set(product).then(d => {
                         this.config.logActivity(`${current_name}|${current_email} created this product: ${this.basket_name}`)
@@ -298,18 +298,18 @@ export class BasketComponent implements OnInit, OnDestroy {
                     this.previewProgressSpinner.close()
                     this.config.displayMessage(`${err}`, false);
                 })
-            }else{
+            } else {
                 this.updateValues(image_url)
             }
         }
 
     }
 
-    updateValues(image_url:string){
+    updateValues(image_url: string) {
         const product: Product = {
             name: this.basket_name,
-            price: this.basket_price,
-            salePrice: this.basket_sale_price,
+            price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
+            salePrice: (this.basket_sale == 'true') ? this.basket_price : this.basket_sale_price,
             discount: this.basket_discount,
             pictures: [image_url],
             shortDetails: this.basket_short_desc,
@@ -412,6 +412,14 @@ export class BasketComponent implements OnInit, OnDestroy {
         })
     }
 
+    copyLink(_id:any){
+        const link = `${this.products[_id].dynamic_link}`
+        this.clip.copyFromContent(link)
+        this.config.displayMessage(`${link} copied to clipboard`, true)
+        //this.toast.success('Link copied to clipboard')
+        // ngxClipboard [cbContent]="row[8]" (cbOnSuccess)="isCopied = true"
+    }
+
     editProClick(_id: any) {
         this.editPro = true
         this.addNewPro = true
@@ -455,7 +463,28 @@ export class BasketComponent implements OnInit, OnDestroy {
         });
 
         const table = (<any>$('#datatables')).DataTable();
-
+        //$('').modal()
         $('.card .material-datatables label').addClass('form-group');
+    }
+
+    createDynamicLink(product_link: string, image_url: string) {
+        const options = {
+            "dynamicLinkInfo": {
+                "domainUriPrefix": "tacng.page.link",
+                "link": product_link,
+                "navigationInfo": {
+                    "enableForcedRedirect": true,
+                },
+                "socialMetaTagInfo": {
+                    "socialTitle": this.basket_name,
+                    "socialDescription": this.basket_full_desc,
+                    "socialImageLink": image_url
+                }
+            },
+            "suffix": {
+                "option": "SHORT"
+            }
+        }
+        return this.http.post("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAu77RE_S5__DnrmaR1LKJvqtNNyR0mSzo", options, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }).toPromise()
     }
 }

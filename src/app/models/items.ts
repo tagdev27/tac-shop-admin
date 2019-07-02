@@ -10,4 +10,5 @@ export interface Items {
     modified_date:string
     link:string
     deleted:boolean
+    merchant:string
 }

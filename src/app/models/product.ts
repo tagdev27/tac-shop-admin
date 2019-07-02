@@ -27,7 +27,7 @@ export interface Product {
   tags?: string[];//ProductTags
   variants?: any[];
   
-  items?: string[];
+  items?: Item[];
   scheduled_sales_period?: string;
   weight?: number;
   created_date?: string;
@@ -37,6 +37,7 @@ export interface Product {
   menu_link?: string;
   deleted?: boolean;
   rating?: number;
+  merchant?:string
 }
 
 // Color Filter
@@ -47,4 +48,10 @@ export interface ColorFilter {
 // Tag Filter
 export interface TagFilter {
   tag?: ProductTags
+}
+
+export interface Item {
+  display: string
+  value:string
+  id:string
 }

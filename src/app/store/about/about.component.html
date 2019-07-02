@@ -18,10 +18,10 @@
                                     <input matInput placeholder="Email Address" type="email" name="email" [(ngModel)]="email">
                                 </mat-form-field>
                                 <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Phone Number" type="number" name="number" [(ngModel)]="number">
+                                    <input matInput placeholder="Phone Number" type="text" name="number" [(ngModel)]="number">
                                 </mat-form-field>
                                 <mat-form-field class="example-full-width">
-                                    <input matInput placeholder="Fax Number" type="number" name="fax" [(ngModel)]="fax">
+                                    <input matInput placeholder="Fax Number" type="text" name="fax" [(ngModel)]="fax">
                                 </mat-form-field>
                                 <mat-form-field class="example-full-width">
                                     <input matInput placeholder="Short Description about TAC" type="text" name="desc" [(ngModel)]="desc">
@@ -35,6 +35,10 @@
                                 </mat-form-field>
                                 <mat-form-field class="example-full-width">
                                     <input matInput placeholder="Twitter Url" type="url" name="twitter" [(ngModel)]="twitter">
+                                </mat-form-field>
+                                <h4 class="card-title">Other Settings</h4>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Alert When Gift Baskets Stock Level is" type="number" name="sl" [(ngModel)]="stock_level">
                                 </mat-form-field>
                             </form>
                         </div>
