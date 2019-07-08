@@ -5,6 +5,7 @@ import { AdminUsers } from "../../models/admin.users";
 import { AdminUsersService } from "../../services/admin-users.service";
 import { timer } from 'rxjs';
 import { Router } from '@angular/router';
+import { AppConfig } from 'src/app/services/global.service';
 
 declare var $: any;
 
@@ -24,6 +25,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     login_pressed = false;
     forgot_pressed = false;
+
+    config = new AppConfig()
 
     constructor(private element: ElementRef, private router: Router) {
         this.nativeElement = element.nativeElement;
@@ -95,6 +98,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                         this.displayMessage('Your account has been blocked. Please contact your Admin.', false)
                         return
                     }
+                    this.config.logActivity(`${ud.name} logged in to admin`)
                     localStorage.setItem('logged', 'true');
                     localStorage.setItem('email', email);
                     localStorage.setItem('name', ud.name);
@@ -124,10 +128,12 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.displayMessage('Your account has been blocked. Please contact your Admin.', false)
                     return
                 }
+                this.config.logActivity(`${ud.name} logged in to admin`)
                 localStorage.setItem('email', email);
                 localStorage.setItem('name', ud.name);
                 localStorage.setItem('dp', ud.image);
                 this.login_pressed = false;
+
                 this.router.navigate(['/dashboard'])
             }).catch(err => {
                 firebase.auth().signOut()

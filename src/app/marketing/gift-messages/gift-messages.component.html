@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="card-body text-center">
                                             <form method="#" action="#">
-                                                <legend>Style Image</legend>
+                                                <legend>Style Image (300 x 150)</legend>
                                                 <div class="fileinput fileinput-new text-center"
                                                     data-provides="fileinput">
                                                     <div class="fileinput-new thumbnail">
@@ -103,6 +103,95 @@
                                                 (click)="submitStyle()">Submit</button>
                                                 <button mat-raised-button type="button" class="btn btn-fill btn-danger"
                                                 (click)="cancelStyle()">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="MESSAGES">
+                        <ng-template ngbTabContent>
+                            <div class="col-md-12" *ngIf="!isMessageAddEdit">
+                                <div class="card">
+                                    <div class="card-header card-header-rose card-header-icon">
+                                        <div class="card-icon">
+                                            <i class="material-icons">assignment</i>
+                                        </div>
+                                        <h4 class="card-title">Gift Card Messages</h4>
+                                    </div>
+                                    <div class="td-actions text-right">
+                                        <button mat-raised-button type="button" class="btn btn-primary btn-round"
+                                            (click)="addMessage()" ngbAutofocus>
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">{{ tableData2.headerRow[0] }}</th>
+                                                        <th>{{ tableData2.headerRow[1] }}</th>
+                                                        <th>{{ tableData2.headerRow[2] }}</th>
+                                                        <th>{{ tableData2.headerRow[3] }}</th>
+                                                        <th class="text-right">{{ tableData2.headerRow[4] }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let row of tableData2.dataRows">
+                                                        <td class="text-center">{{row[0]}}</td>
+                                                        <td>
+                                                            {{row[2]}}
+                                                        </td>
+                                                        <td>{{row[3]}}</td>
+                                                        <td class="td-actions text-right">
+                                                            <button mat-raised-button type="button"
+                                                                class="btn btn-success {{row[4]}}"
+                                                                (click)="editMessage(row)">
+                                                                <i class="material-icons">edit</i>
+                                                            </button>
+                                                            <button mat-raised-button type="button"
+                                                                class="btn btn-danger {{row[4]}}"
+                                                                (click)="deleteMessage(row)">
+                                                                <i class="material-icons">close</i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="isMessageAddEdit">
+                                <div class="col-md-12">
+                                    <div class="card text-center">
+                                        <div class="card-header card-header-rose card-header-icon">
+                                            <div class="card-icon">
+                                                <i class="material-icons">mail_outline</i>
+                                            </div>
+                                            <h4 class="card-title">Add new gift card message</h4>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <form method="#" action="#">
+                                                <mat-form-field>
+                                                    <mat-select placeholder="Gift Card Message Category" multiple [(ngModel)]="mCategory" name="bmc" ariaLabel="card_categories[0]">
+                                                        <mat-option *ngFor="let cc of card_categories" [value]="cc">
+                                                          {{cc}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput placeholder="Card Message" type="text" name="m1"
+                                                        [(ngModel)]="mText">
+                                                </mat-form-field>
+                                            </form>
+                                        </div>
+                                        <div class="card-footer ">
+                                            <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                                                (click)="submitMessage()">Submit</button>
+                                                <button mat-raised-button type="button" class="btn btn-fill btn-danger"
+                                                (click)="cancelMessage()">Cancel</button>
                                         </div>
                                     </div>
                                 </div>

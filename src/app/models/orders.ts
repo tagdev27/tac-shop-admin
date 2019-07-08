@@ -25,5 +25,5 @@ export interface TacOrder {
     total_amount: number
     shipping_details: any
     gift_card_style: string
-    tracking_details: Tracking
+    tracking_details: Tracking[]
 }

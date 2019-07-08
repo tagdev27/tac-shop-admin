@@ -197,13 +197,15 @@
                       [(ngModel)]="basket_sale_start_date">
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
+                      <small>{{basket_sale_start_date}}</small>
                     </mat-form-field>
                     <mat-form-field *ngIf="basket_sale == 'false'">
                         <input matInput [matDatepicker]="picker2" placeholder="Choose an end date for sale period" (click)="picker2.open()" name="end"
                         [(ngModel)]="basket_sale_end_date">
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
-                      </mat-form-field>
+                        <small>{{basket_sale_end_date}}</small>
+                    </mat-form-field>
   
                   <mat-form-field class="example-full-width">
                     <input matInput placeholder="Dynamic Link" type="url" disabled name="dyLink"

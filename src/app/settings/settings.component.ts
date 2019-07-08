@@ -164,13 +164,13 @@ export class SettingsComponent implements OnInit {
       id:key,
       access_levels: searchedRole[0].access_levels,
       blocked: false,
-      email: email,
+      email: email.toLowerCase(),
       image: 'https://tacadmin.firebaseapp.com/assets/img/default-avatar.png',
       name:name,
       position:position,
       role:this.accountRole
     }
-    firebase.firestore().collection('db').doc('tacadmin').collection('users').doc(email).set(reg_user).then(d => {
+    firebase.firestore().collection('db').doc('tacadmin').collection('users').doc(email.toLowerCase()).set(reg_user).then(d => {
       this.previewProgressSpinner.close()
       this.config.displayMessage("User successfully created.", true);
       this.display_users = true
