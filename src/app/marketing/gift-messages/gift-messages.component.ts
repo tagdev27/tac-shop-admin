@@ -50,11 +50,11 @@ export class GiftMessagesComponent implements OnInit, OnDestroy {
     currentStyle: any
 
     //messages
-    card_categories:string[] = []
+    card_categories: string[] = []
     mCategory = []
     mText = ''
     isMessageAddEdit = false
-    currentMessage:any
+    currentMessage: any
 
     constructor(private previewProgressSpinner: OverlayService) {
         this.tableData1 = {
@@ -166,7 +166,7 @@ export class GiftMessagesComponent implements OnInit, OnDestroy {
         this.isAdding = false
     }
 
-    editMessage(msg:any){
+    editMessage(msg: any) {
         this.mCategory = `${msg[2]}`.split(',')
         this.mText = msg[3]
         this.isMessageAddEdit = true
@@ -208,7 +208,7 @@ export class GiftMessagesComponent implements OnInit, OnDestroy {
         })
     }
 
-    deleteMessage(msg:any){
+    deleteMessage(msg: any) {
         const id = `${msg[1]}`
         swal({
             title: 'Delete Alert',
@@ -243,8 +243,12 @@ export class GiftMessagesComponent implements OnInit, OnDestroy {
     }
 
     submitMessage() {
-        if(this.mCategory.length == 0 || this.mText == ''){
+        if (this.mCategory.length == 0 || this.mText == '') {
             this.config.displayMessage("Please enter all fields.", false)
+            return
+        }
+        if (this.mText.length > 250) {
+            this.config.displayMessage("Characters should not exceed 250", false)
             return
         }
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
@@ -307,11 +311,11 @@ export class GiftMessagesComponent implements OnInit, OnDestroy {
         if (image.length > 0) {
             const image_url = await this.uploadImageToFirebase(image)
             st.image = image_url
-            this.uploadValuesToBannerTable(st,this.isAdding)
+            this.uploadValuesToBannerTable(st, this.isAdding)
         } else {
             this.uploadValuesToBannerTable(st, this.isAdding)
         }
-        
+
     }
 
     async uploadImageToFirebase(image: FileList): Promise<any> {
@@ -352,6 +356,4 @@ export class GiftMessagesComponent implements OnInit, OnDestroy {
             })
         }
     }
-
-
 }

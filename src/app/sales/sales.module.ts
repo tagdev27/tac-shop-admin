@@ -11,6 +11,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 
 import { SalesRoutes } from './sales.routing';
 import { CartComponent } from './cartorders/cartorders.component';
+import { InvoiceComponent } from "./invoice/invoice.component";
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { CartComponent } from './cartorders/cartorders.component';
   ],
   declarations: [
     CartComponent,
+    InvoiceComponent
     //   CategoryComponent,
     //   SubCatComponent,
     //   ItemsComponent,
