@@ -4,5 +4,7 @@ export interface Reviews {
     email?:string
     title:string
     text:string
-    product_id:number
+    rating:number
+    created_date:string
+    product_id:string
 }

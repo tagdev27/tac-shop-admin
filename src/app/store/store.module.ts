@@ -7,7 +7,7 @@ import { MaterialModule } from '../app.module';
 import { StoreRoutes } from './store.routing';
 import { AboutComponent } from './about/about.component';
 import { CurrencyComponent } from './currency/currency.component';
-import { PaymentComponent } from './payment/payment.component';
+import { ReviewsComponent } from './reviews/reviews.component';
 import { TaxComponent } from './tax/tax.component';
 
 @NgModule({
@@ -20,7 +20,7 @@ import { TaxComponent } from './tax/tax.component';
   declarations: [
     AboutComponent,
     CurrencyComponent,
-    PaymentComponent,
+    ReviewsComponent,
     TaxComponent,
   ]
 })

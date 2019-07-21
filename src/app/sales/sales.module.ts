@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../app.module';
 import { HttpClientModule } from "@angular/common/http";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -12,6 +13,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { SalesRoutes } from './sales.routing';
 import { CartComponent } from './cartorders/cartorders.component';
 import { InvoiceComponent } from "./invoice/invoice.component";
+import { OrdersComponent } from "./orders/orders.component";
 
 @NgModule({
   imports: [
@@ -21,11 +23,13 @@ import { InvoiceComponent } from "./invoice/invoice.component";
     MaterialModule,
     TagInputModule,
     HttpClientModule,
-    ClipboardModule, // required animations module
+    ClipboardModule,
+    NgbModule.forRoot(), // required animations module
   ],
   declarations: [
     CartComponent,
-    InvoiceComponent
+    InvoiceComponent,
+    OrdersComponent
     //   CategoryComponent,
     //   SubCatComponent,
     //   ItemsComponent,

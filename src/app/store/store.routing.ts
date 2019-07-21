@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 import { AboutComponent } from './about/about.component';
 import { CurrencyComponent } from './currency/currency.component';
-import { PaymentComponent } from './payment/payment.component';
+import { ReviewsComponent } from './reviews/reviews.component';
 import { TaxComponent } from './tax/tax.component';
 
 
@@ -21,8 +21,8 @@ export const StoreRoutes: Routes = [
     }, {
       path: '',
       children: [ {
-        path: 'currency',
-        component: PaymentComponent
+        path: 'reviews',
+        component: ReviewsComponent
         }]
     }, {
         path: '',

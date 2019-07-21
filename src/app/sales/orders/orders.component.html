@@ -1,0 +1,414 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row" *ngIf="!view">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">assignment</i>
+                        </div>
+                        <h4 class="card-title">Orders</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <button mat-raised-button type="button" class="btn btn-primary btn-round"
+                                (click)="getOrderByStatus('all')">
+                                View All
+                            </button>
+                            <button mat-raised-button type="button" class="btn btn-primary btn-round"
+                                (click)="getOrderByStatus('pending')">
+                                View Pending
+                            </button>
+                            <button mat-raised-button type="button" class="btn btn-primary btn-round"
+                                (click)="getOrderByStatus('processing')">
+                                View Processing
+                            </button>
+                            <button mat-raised-button type="button" class="btn btn-primary btn-round"
+                                (click)="getOrderByStatus('shipped')">
+                                View Shipped
+                            </button>
+                            <button mat-raised-button type="button" class="btn btn-primary btn-round"
+                                (click)="getOrderByStatus('completed')">
+                                View Completed
+                            </button>
+                            <button mat-raised-button type="button" class="btn btn-primary btn-round"
+                                (click)="getOrderByStatus('canceled')">
+                                View Canceled
+                            </button>
+                        </div>
+                        <div class="material-datatables table-responsive">
+                            <table id="datatables" class="table table-striped table-no-bordered table-hover"
+                                cellspacing="0" width="100%" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>{{ dataTable.headerRow[0] }}</th>
+                                        <th>{{ dataTable.headerRow[1] }}</th>
+                                        <th>{{ dataTable.headerRow[2] }}</th>
+                                        <th>{{ dataTable.headerRow[3] }}</th>
+                                        <th>{{ dataTable.headerRow[4] }}</th>
+                                        <th>{{ dataTable.headerRow[5] }}</th>
+                                        <th>{{ dataTable.headerRow[6] }}</th>
+                                        <th class="disabled-sorting text-right">{{ dataTable.headerRow[7] }}</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>{{ dataTable.footerRow[0] }}</th>
+                                        <th>{{ dataTable.footerRow[1] }}</th>
+                                        <th>{{ dataTable.footerRow[2] }}</th>
+                                        <th>{{ dataTable.footerRow[3] }}</th>
+                                        <th>{{ dataTable.footerRow[4] }}</th>
+                                        <th>{{ dataTable.headerRow[5] }}</th>
+                                        <th>{{ dataTable.headerRow[6] }}</th>
+                                        <th class="text-right">{{ dataTable.footerRow[7] }}</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr *ngFor="let row of dataTable.dataRows">
+                                        <td>{{row[0]}}</td>
+                                        <td>{{row[2]}}</td>
+                                        <td>{{row[3]}}</td>
+                                        <td>{{row[4]}}</td>
+                                        <td>{{row[5]}}</td>
+                                        <td>{{row[6]}}</td>
+                                        <td>{{row[7]}}</td>
+                                        <td class="text-right">
+                                            <a href="javascript:void(0)"
+                                                class="btn btn-link btn-danger btn-just-icon remove"
+                                                (click)="viewOrder(row[1])"><i class="material-icons">visibility</i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+            <!-- end col-md-12 -->
+        </div>
+        <!-- end row -->
+        <div class="row" *ngIf="view">
+            <div class="col-lg-12">
+                <p class="h2">
+                    <a href="javascript:void(0)" class="btn btn-link btn-danger btn-just-icon remove"
+                        (click)="cancelView()"><i class="material-icons">arrow_back</i></a>TAC Order Overview ->
+                    {{currentOrder.currency_used}}{{currentOrder.total_amount}}
+                </p>
+                <ngb-tabset [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills">
+                    <ngb-tab title="BASIC INFORMATION">
+                        <ng-template ngbTabContent>
+                            <div class="row">
+                                <div class="col-md-8 ml-auto mr-auto">
+                                    <div class="card card-signup">
+                                        <h2 class="card-title text-center">Basic Information</h2>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Currency Used</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.currency_used}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-primary">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Transaction/Order ID</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.transaction_id}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-info">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Country</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.country}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Email</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.email}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-primary">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Tracking ID</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.track_id}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-info">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Created Date</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.created_date}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="PRODUCTS">
+                        <ng-template ngbTabContent>
+                            <div class="row">
+                                <div class="col-md-8 ml-auto mr-auto">
+                                    <div class="card card-signup">
+                                        <h2 class="card-title text-center">Products Bought By User</h2>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">{{ dataTable1.headerRow[0] }}</th>
+                                                            <th>{{ dataTable1.headerRow[1] }}</th>
+                                                            <th>{{ dataTable1.headerRow[2] }}</th>
+                                                            <th>{{ dataTable1.headerRow[3] }}</th>
+                                                            <th>{{ dataTable1.headerRow[4] }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let row of dataTable1.dataRows">
+                                                            <td class="text-center">{{row[0]}}</td>
+                                                            <td>
+                                                                <div class="user">
+                                                                    <div class="photo">
+                                                                        <img src="{{row[1]}}" />
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>{{row[2]}}</td>
+                                                            <td>{{row[3]}}</td>
+                                                            <td>{{row[4]}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="SHIPPING DETAILS">
+                        <ng-template ngbTabContent>
+                            <div class="row">
+                                <div class="col-md-8 ml-auto mr-auto">
+                                    <div class="card card-signup">
+                                        <h2 class="card-title text-center">Shipping Information</h2>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Billing Information</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.shipping_details.firstname}}
+                                                                {{currentOrder.shipping_details.lastname}}<br>
+                                                                {{currentOrder.shipping_details.phone}}<br>
+                                                                {{currentOrder.shipping_details.email}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-primary">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Special Instruction</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.shipping_details.specialinstructions}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Recipient Information</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.shipping_details.fullname}}<br>
+                                                                {{currentOrder.shipping_details.address}}<br>
+                                                                {{currentOrder.shipping_details.town}}<br>
+                                                                {{currentOrder.shipping_details.state}}<br>
+                                                                {{currentOrder.shipping_details.country}}<br>
+                                                                {{currentOrder.shipping_details.recipientphone}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="GIFT CARD DETAILS">
+                        <ng-template ngbTabContent>
+                            <div class="row">
+                                <div class="col-md-8 ml-auto mr-auto">
+                                    <div class="card card-signup">
+                                        <h2 class="card-title text-center">Gift Card Details</h2>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Gift Card Message</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.shipping_details.card_message}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Gift Card Style Selected</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.gift_card_style}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="OTHER PAYMENT DETAILS">
+                        <ng-template ngbTabContent>
+                            <div class="row">
+                                <div class="col-md-8 ml-auto mr-auto">
+                                    <div class="card card-signup">
+                                        <h2 class="card-title text-center">Other Payment Information</h2>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">TAX PAID</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.currency_used}}{{currentOrder.other_payment_detals.tax}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 ml-auto">
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-rose">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">DELIVERY FEE</h4>
+                                                            <p class="description">
+                                                                {{currentOrder.currency_used}}{{currentOrder.other_payment_detals.delivery}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="STATUS">
+                        <ng-template ngbTabContent>
+                            <div class="row">
+                                <div class="col-md-8 ml-auto mr-auto">
+                                    <div class="card card-signup">
+                                        <h2 class="card-title text-center">Order Status</h2>
+                                        <div class="card-body">
+                                            <mat-form-field>
+                                                <mat-select placeholder="Select Status" [(ngModel)]="current_status"
+                                                    name="status" ariaLabel="order_status[0]">
+                                                    <mat-option *ngFor="let os of order_status" [value]="os">
+                                                        {{os}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <div class="form-group">
+                                                <label>Status update note</label>
+                                                <div class="form-group">
+                                                    <textarea class="form-control" rows="5" name="sn"
+                                                        [(ngModel)]="status_note"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input" type="checkbox" value=""
+                                                        id="emailSend"> Check this box if user should receive email
+                                                    update
+                                                    <span class="form-check-sign">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer ">
+                                            <button mat-raised-button type="button" class="btn btn-fill btn-rose"
+                                                (click)="statusButtonAction()">Update Status</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+        </div>
+    </div>
+</div>

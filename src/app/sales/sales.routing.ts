@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { CartComponent } from './cartorders/cartorders.component';
 import { InvoiceComponent } from "./invoice/invoice.component";
+import { OrdersComponent } from "./orders/orders.component";
 
 
 export const SalesRoutes: Routes = [
@@ -14,7 +15,7 @@ export const SalesRoutes: Routes = [
     path: '',
     children: [ {
       path: 'orders',
-      //component: CategoryComponent
+      component: OrdersComponent
     }]
     }, {
       path: '',
