@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { StoreSettings } from 'src/app/models/store';
 import { AppConfig } from 'src/app/services/global.service';
 import { Product } from 'src/app/models/product';
+import { Items } from 'src/app/models/items';
 const misc: any = {
     navbar_menu_visible: 0,
     active_collapse: true,
@@ -255,12 +256,12 @@ export class NavbarComponent implements OnInit {
         firebase.firestore().collection('db').doc('tacadmin').collection('settings').doc('store').get().then(snap => {
             this.stock_alerts = []
             this.settings = <StoreSettings>snap.data()
-            firebase.firestore().collection('db').doc('tacadmin').collection('products').where("stock", "<=", this.settings.stock_level).get().then(query => {
+            firebase.firestore().collection('db').doc('tacadmin').collection('items').where("stock_level", "<=", this.settings.stock_level).get().then(query => {
                 this.notification_size = query.size
                 if(query != null){
                     query.forEach(data => {
-                        const pro = <Product>data.data()
-                        this.stock_alerts.push(`Product ${pro.name} has ${pro.stock} items left in stock`)
+                        const item = <Items>data.data()
+                        this.stock_alerts.push(`Item ${item.name} has ${item.stock_level} pieces left in stock`)
                     })
                 }
             })

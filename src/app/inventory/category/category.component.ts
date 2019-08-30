@@ -123,8 +123,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
         }
 
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
-
-        const upload_task = firebase.storage().ref("main-category").child(image.item(0).name)
+        const key = firebase.database().ref().push().key
+        const upload_task = firebase.storage().ref("main-category").child(`${key}.jpg`)
 
         upload_task.put(image.item(0)).then(task => {
             const key = firebase.database().ref().push().key
@@ -286,8 +286,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
 
 
-
-        const upload_task = firebase.storage().ref("main-category").child(image.item(0).name)
+        const key = firebase.database().ref().push().key
+        const upload_task = firebase.storage().ref("main-category").child(`${key}.jpg`)
 
         upload_task.put(image.item(0)).then(task => {
             const key = this.currentCatRow[0]

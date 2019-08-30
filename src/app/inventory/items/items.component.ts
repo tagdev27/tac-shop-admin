@@ -63,7 +63,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
                 const category = <Items>data.data()
                 this.categories.push(category)
                 if (!category.deleted) {
-                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, category.stock_level, `₦${category.price}`, category.modified_date, category.link, 'btn-link'])
+                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, `${category.stock_level}`, `₦${category.price}`, category.modified_date, category.link, 'btn-link'])
                 }
                 index = index + 1
             })
@@ -85,7 +85,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
                 const category = <Items>data.data()
                 this.categories.push(category)
                 if (category.deleted) {
-                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, category.stock_level, `₦${category.price}`, category.modified_date, category.link, 'btn-link'])
+                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, `${category.stock_level}`, `₦${category.price}`, category.modified_date, category.link, 'btn-link'])
                 }
                 index = index + 1
             })
@@ -126,7 +126,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
 
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
 
-        const upload_task = firebase.storage().ref("items").child(image.item(0).name)
+        const key = firebase.database().ref().push().key
+        const upload_task = firebase.storage().ref("items").child(`${key}.jpg`)
 
         upload_task.put(image.item(0)).then(task => {
             const key = firebase.database().ref().push().key
@@ -141,8 +142,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
                     created_by: `${current_name}|${current_email}`,
                     image: url,
                     deleted: false,
-                    stock_level: stock,
-                    price: price,
+                    stock_level: Number(stock),
+                    price: Number(price),
                     modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
                     link: `/item/${key}`,
                     merchant: 'tac'
@@ -272,8 +273,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
             firebase.firestore().collection('db').doc('tacadmin').collection('items').doc(key).update({
                 'name': name,
                 'description': desc,
-                'stock_level': stock,
-                'price':price,
+                'stock_level': Number(stock),
+                'price':Number(price),
                 'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
             }).then(d => {
                 this.config.logActivity(`${current_name}|${current_email} updated this Item: ${name}`)
@@ -292,8 +293,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
 
 
-
-        const upload_task = firebase.storage().ref("items").child(image.item(0).name)
+        const key = firebase.database().ref().push().key
+        const upload_task = firebase.storage().ref("items").child(`${key}.jpg`)
 
         upload_task.put(image.item(0)).then(task => {
             const key = this.currentCatRow[0]
@@ -304,8 +305,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
                     'name': name,
                     'description': desc,
                     'image': url,
-                    'stock_level': stock,
-                    'price':price,
+                    'stock_level': Number(stock),
+                    'price':Number(price),
                     'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
                 }).then(d => {
                     this.config.logActivity(`${current_name}|${current_email} updated this Item: ${name}`)

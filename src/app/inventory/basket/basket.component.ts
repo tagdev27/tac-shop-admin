@@ -215,7 +215,7 @@ export class BasketComponent implements OnInit, OnDestroy {
 
     productSubmitClicked() {
         const image = (<HTMLInputElement>document.getElementById("pro_images")).files
-        if (this.basket_name == '' || this.basket_price == 0 || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 || this.basket_items.length == 0) {
+        if (this.basket_name == '' || this.basket_price == 0 || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 ) {//|| this.basket_items.length == 0
             this.config.displayMessage("All fields marked with * are required", false)
             return
         }
@@ -225,14 +225,15 @@ export class BasketComponent implements OnInit, OnDestroy {
                 this.config.displayMessage("Please upload an image for this gift basket", false)
                 return
             }
-            const upload_task = firebase.storage().ref("product").child(image.item(0).name)
+            const key = firebase.database().ref().push().key
+            const upload_task = firebase.storage().ref("product").child(`${key}.jpg`)
             upload_task.put(image.item(0)).then(task => {
                 const key = firebase.database().ref().push().key
                 const id = this.randomInt(0, 9999999999)
                 const current_email = localStorage.getItem('email')
                 const current_name = localStorage.getItem('name')
                 upload_task.getDownloadURL().then(async url => {
-                    const dynamic_link = await this.createDynamicLink(`https://tac.ng/home/left-sidebar/product/${id}`, url)
+                    const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/left-sidebar/product/${id}`, url)
                     const product: Product = {
                         id: id,
                         key: key,
@@ -285,7 +286,8 @@ export class BasketComponent implements OnInit, OnDestroy {
         } else {//update
             var image_url = this.basket_image
             if (image.length > 0) {
-                const upload_task = firebase.storage().ref("product").child(image.item(0).name)
+                const key = firebase.database().ref().push().key
+                const upload_task = firebase.storage().ref("product").child(`${key}.jpg`)
                 upload_task.put(image.item(0)).then(task => {
                     upload_task.getDownloadURL().then(url => {
                         image_url = url
@@ -470,7 +472,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     createDynamicLink(product_link: string, image_url: string) {
         const options = {
             "dynamicLinkInfo": {
-                "domainUriPrefix": "tacng.page.link",
+                "domainUriPrefix": "tacgifts.page.link",
                 "link": product_link,
                 "navigationInfo": {
                     "enableForcedRedirect": true,

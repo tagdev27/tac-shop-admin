@@ -9,6 +9,7 @@ import swal from 'sweetalert2';
 import { StoreSettings } from '../models/store';
 import { AppConfig } from '../services/global.service';
 import { Product } from '../models/product';
+import { Items } from '../models/items';
 
 declare const $: any;
 
@@ -236,12 +237,12 @@ export class SidebarComponent implements OnInit {
         firebase.firestore().collection('db').doc('tacadmin').collection('settings').doc('store').get().then(snap => {
             this.stock_alerts = []
             this.settings = <StoreSettings>snap.data()
-            firebase.firestore().collection('db').doc('tacadmin').collection('products').where("stock", "<=", this.settings.stock_level).get().then(query => {
+            firebase.firestore().collection('db').doc('tacadmin').collection('items').where("stock_level", "<=", this.settings.stock_level).get().then(query => {
                 this.notification_size = query.size
                 if(query != null){
                     query.forEach(data => {
-                        const pro = <Product>data.data()
-                        this.stock_alerts.push(`Product ${pro.name} has ${pro.stock} items left in stock`)
+                        const item = <Items>data.data()
+                        this.stock_alerts.push(`Item ${item.name} has ${item.stock_level} pieces left in stock`)
                     })
                 }
             })

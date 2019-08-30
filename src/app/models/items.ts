@@ -5,8 +5,8 @@ export interface Items {
     created_date:string
     created_by:string
     image:string
-    price:string
-    stock_level:string
+    price:number
+    stock_level:number
     modified_date:string
     link:string
     deleted:boolean

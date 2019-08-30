@@ -342,7 +342,8 @@ export class BannersComponent implements OnInit, OnDestroy {
     }
 
     async uploadImageToFirebase(image: FileList): Promise<any> {
-        const upload_task = firebase.storage().ref("banners").child(image.item(0).name)
+        const key = firebase.database().ref().push().key
+        const upload_task = firebase.storage().ref("banners").child(`${key}.jpg`)
         const put = await upload_task.put(image.item(0))
         const url = await upload_task.getDownloadURL()
         return url

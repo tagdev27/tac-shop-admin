@@ -67,19 +67,19 @@ export class SubCatComponent implements OnInit, OnDestroy {
         firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').onSnapshot(query => {
             this.data = []
             this.categories = []
-            var index = 0
+            var index = 1
             query.forEach(async data => {
                 const category = <SubCategory>data.data()
                 this.categories.push(category)
                 if (!category.deleted) {
                     const getMId = await this.getMainCategoryNameFromId(category.main_category_id);
-                    this.data.push([category.id, category.name, category.description, getMId.name, category.created_date, category.created_by, category.image, `${category.deleted}`, category.meta, category.modified_date, category.link, 'btn-link'])
+                    this.data.push([`${index}`, category.id, category.name, category.description, getMId.name, category.created_date, category.created_by, category.image, `${category.deleted}`, category.meta, category.modified_date, category.link, 'btn-link'])
                 }
                 index = index + 1
             })
             this.dataTable = {
-                headerRow: ['Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
-                footerRow: ['Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
+                headerRow: ['ID', 'Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
+                footerRow: ['ID', 'Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
                 dataRows: this.data
             };
         });
@@ -90,19 +90,19 @@ export class SubCatComponent implements OnInit, OnDestroy {
         firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').onSnapshot(query => {
             this.data = []
             this.categories = []
-            var index = 0
+            var index = 1
             query.forEach(async data => {
                 const category = <SubCategory>data.data()
                 this.categories.push(category)
                 if (category.deleted) {
                     const getMId = await this.getMainCategoryNameFromId(category.main_category_id);
-                    this.data.push([category.id, category.name, category.description, getMId.name, category.created_date, category.created_by, category.image, `${category.deleted}`, category.meta, category.modified_date, category.link, 'btn-link'])
+                    this.data.push([`${index}`, category.id, category.name, category.description, getMId.name, category.created_date, category.created_by, category.image, `${category.deleted}`, category.meta, category.modified_date, category.link, 'btn-link'])
                 }
                 index = index + 1
             })
             this.dataTable = {
-                headerRow: ['Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
-                footerRow: ['Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
+                headerRow: ['ID', 'Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
+                footerRow: ['ID', 'Image', 'Name', 'Description', 'Main Category', 'Created Date', 'Modified Date', 'Actions'],
                 dataRows: this.data
             };
         });
@@ -154,13 +154,13 @@ export class SubCatComponent implements OnInit, OnDestroy {
         })
 
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
-
+        const key = firebase.database().ref().push().key
         if (image.length > 0) {
-            const upload_task = firebase.storage().ref("sub-category").child(image.item(0).name)
+            const upload_task = firebase.storage().ref("sub-category").child(`${key}.jpj`)//image.item(0).name
 
             upload_task.put(image.item(0)).then(task => {
                 upload_task.getDownloadURL().then(url => {
-                    this.uploadCatData(selectedMain, url, desc, meta)
+                    this.uploadCatData(selectedMain, url, desc, meta, name)
                 }).catch(err => {
                     this.previewProgressSpinner.close()
                     this.config.displayMessage(`${err}`, false);
@@ -170,11 +170,11 @@ export class SubCatComponent implements OnInit, OnDestroy {
                 this.config.displayMessage(`${err}`, false);
             })
         } else {
-            this.uploadCatData(selectedMain, 'https://tacadmin.firebaseapp.com/assets/img/image_placeholder.jpg', desc, meta)
+            this.uploadCatData(selectedMain, 'https://tacadmin.firebaseapp.com/assets/img/image_placeholder.jpg', desc, meta, name)
         }
     }
 
-    uploadCatData(selectedMain: MainCategory[], url: string, desc: string, meta: string) {
+    uploadCatData(selectedMain: MainCategory[], url: string, desc: string, meta: string, name:string) {
         const key = firebase.database().ref().push().key
         const current_email = localStorage.getItem('email')
         const current_name = localStorage.getItem('name')
@@ -333,8 +333,8 @@ export class SubCatComponent implements OnInit, OnDestroy {
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
 
 
-
-        const upload_task = firebase.storage().ref("sub-category").child(image.item(0).name)
+        const key = firebase.database().ref().push().key
+        const upload_task = firebase.storage().ref("sub-category").child(`${key}.jpg`)
 
         upload_task.put(image.item(0)).then(task => {
             const key = this.currentCatRow[0]
