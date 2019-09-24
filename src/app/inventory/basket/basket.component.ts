@@ -213,7 +213,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    productSubmitClicked() {
+    async productSubmitClicked() {
         const image = (<HTMLInputElement>document.getElementById("pro_images")).files
         if (this.basket_name == '' || this.basket_price == 0 || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 ) {//|| this.basket_items.length == 0
             this.config.displayMessage("All fields marked with * are required", false)
@@ -289,9 +289,10 @@ export class BasketComponent implements OnInit, OnDestroy {
                 const key = firebase.database().ref().push().key
                 const upload_task = firebase.storage().ref("product").child(`${key}.jpg`)
                 upload_task.put(image.item(0)).then(task => {
-                    upload_task.getDownloadURL().then(url => {
+                    upload_task.getDownloadURL().then(async url => {
                         image_url = url
-                        this.updateValues(image_url)
+                        const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/left-sidebar/product/${this.currentProRow.id}`, image_url)
+                        this.updateValues(image_url, dynamic_link['shortLink'])
                     }).catch(err => {
                         this.previewProgressSpinner.close()
                         this.config.displayMessage(`${err}`, false);
@@ -301,13 +302,14 @@ export class BasketComponent implements OnInit, OnDestroy {
                     this.config.displayMessage(`${err}`, false);
                 })
             } else {
-                this.updateValues(image_url)
+                const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/left-sidebar/product/${this.currentProRow.id}`, image_url)
+                this.updateValues(image_url, dynamic_link['shortLink'])
             }
         }
 
     }
 
-    updateValues(image_url: string) {
+    updateValues(image_url: string, dynamic_link:string) {
         const product: Product = {
             name: this.basket_name,
             price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
@@ -481,6 +483,12 @@ export class BasketComponent implements OnInit, OnDestroy {
                     "socialTitle": this.basket_name,
                     "socialDescription": this.basket_full_desc,
                     "socialImageLink": image_url
+                },
+                "androidInfo": {
+                    "androidPackageName": "com.taconline.giftshop"
+                },
+                "iosInfo": {
+                    "iosBundleId": "com.taconline.giftshop"
                 }
             },
             "suffix": {
