@@ -76,10 +76,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.displayMessage("All fields must be filled.", false)
             return
         }
-        if (email.search("@tac.ng") < 0) {
-            this.displayMessage("Invalid email address", false)
-            return
-        }
+        // if (email.search("@tac.ng") < 0) {
+        //     this.displayMessage("Invalid email address", false)
+        //     return
+        // }
         
         this.login_pressed = true;
 

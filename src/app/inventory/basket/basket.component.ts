@@ -233,7 +233,7 @@ export class BasketComponent implements OnInit, OnDestroy {
                 const current_email = localStorage.getItem('email')
                 const current_name = localStorage.getItem('name')
                 upload_task.getDownloadURL().then(async url => {
-                    const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/left-sidebar/product/${id}`, url)
+                    const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${id}`, url)
                     const product: Product = {
                         id: id,
                         key: key,
@@ -291,7 +291,7 @@ export class BasketComponent implements OnInit, OnDestroy {
                 upload_task.put(image.item(0)).then(task => {
                     upload_task.getDownloadURL().then(async url => {
                         image_url = url
-                        const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/left-sidebar/product/${this.currentProRow.id}`, image_url)
+                        const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${this.currentProRow.id}`, image_url)
                         this.updateValues(image_url, dynamic_link['shortLink'])
                     }).catch(err => {
                         this.previewProgressSpinner.close()
@@ -302,7 +302,7 @@ export class BasketComponent implements OnInit, OnDestroy {
                     this.config.displayMessage(`${err}`, false);
                 })
             } else {
-                const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/left-sidebar/product/${this.currentProRow.id}`, image_url)
+                const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${this.currentProRow.id}`, image_url)
                 this.updateValues(image_url, dynamic_link['shortLink'])
             }
         }

@@ -151,10 +151,10 @@ export class SettingsComponent implements OnInit {
       this.config.displayMessage("Please enter all fields", false)
       return
     }
-    if(email.search('@tac.ng') < 0){
-      this.config.displayMessage("Invalid email address", false)
-      return
-    }
+    // if(email.search('@tac.ng') < 0){
+    //   this.config.displayMessage("Invalid email address", false)
+    //   return
+    // }
     const searchedRole = this.roles.filter(function (item, index, array){
       return item.name == ar;
     })
