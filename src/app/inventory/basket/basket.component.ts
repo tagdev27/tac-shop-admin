@@ -139,12 +139,12 @@ export class BasketComponent implements OnInit, OnDestroy {
             query.forEach(data => {
                 const pro = <Product>data.data()
                 this.products.push(pro)
-                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link', pro.dynamic_link])
+                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `₦${pro.salePrice}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link', pro.dynamic_link])
                 index = index + 1
             })
             this.dataTable = {
-                headerRow: ['Image', 'Name', 'Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
-                footerRow: ['Image', 'Name', 'Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
+                headerRow: ['Image', 'Name', 'Price', 'Discount Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
+                footerRow: ['Image', 'Name', 'Price', 'Discount Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
                 dataRows: this.data
             };
         });
@@ -159,12 +159,12 @@ export class BasketComponent implements OnInit, OnDestroy {
             query.forEach(data => {
                 const pro = <Product>data.data()
                 this.products.push(pro)
-                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link'])
+                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `₦${pro.salePrice}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link'])
                 index = index + 1
             })
             this.dataTable = {
-                headerRow: ['Image', 'Name', 'Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
-                footerRow: ['Image', 'Name', 'Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
+                headerRow: ['Image', 'Name', 'Price', 'Discount Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
+                footerRow: ['Image', 'Name', 'Price', 'Discount Price', 'Stock', 'Created Date', 'Modified Date', 'Actions'],
                 dataRows: this.data
             };
         });
@@ -222,6 +222,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
         if (!this.editPro) {//new add
             if (this.basket_image == '' || image.length == 0) {
+                this.previewProgressSpinner.close()
                 this.config.displayMessage("Please upload an image for this gift basket", false)
                 return
             }
@@ -238,8 +239,10 @@ export class BasketComponent implements OnInit, OnDestroy {
                         id: id,
                         key: key,
                         name: this.basket_name,
-                        price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
-                        salePrice: (this.basket_sale == 'true') ? this.basket_price : this.basket_sale_price,
+                        // price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
+                        // salePrice: (this.basket_sale == 'true') ? this.basket_price : this.basket_sale_price,
+                        price: this.basket_price,
+                        salePrice: this.basket_sale_price,
                         discount: this.basket_discount,
                         pictures: [url],
                         shortDetails: this.basket_short_desc,
@@ -312,8 +315,10 @@ export class BasketComponent implements OnInit, OnDestroy {
     updateValues(image_url: string, dynamic_link:string) {
         const product: Product = {
             name: this.basket_name,
-            price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
-            salePrice: (this.basket_sale == 'true') ? this.basket_price : this.basket_sale_price,
+            // price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
+            // salePrice: (this.basket_sale == 'true') ? this.basket_price : this.basket_sale_price,
+            price: this.basket_price,
+            salePrice: this.basket_sale_price,
             discount: this.basket_discount,
             pictures: [image_url],
             shortDetails: this.basket_short_desc,

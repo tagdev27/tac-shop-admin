@@ -156,7 +156,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
         const key = firebase.database().ref().push().key
         if (image.length > 0) {
-            const upload_task = firebase.storage().ref("sub-category").child(`${key}.jpj`)//image.item(0).name
+            const upload_task = firebase.storage().ref("sub-category").child(`${key}.jpg`)//image.item(0).name
 
             upload_task.put(image.item(0)).then(task => {
                 upload_task.getDownloadURL().then(url => {

@@ -38,7 +38,8 @@
                     <th>{{ dataTable.headerRow[3] }}</th>
                     <th>{{ dataTable.headerRow[4] }}</th>
                     <th>{{ dataTable.headerRow[5] }}</th>
-                    <th class="disabled-sorting text-right">{{ dataTable.headerRow[6] }}</th>
+                    <th>{{ dataTable.headerRow[6] }}</th>
+                    <th class="disabled-sorting text-right">{{ dataTable.headerRow[7] }}</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -49,7 +50,8 @@
                     <th>{{ dataTable.footerRow[3] }}</th>
                     <th>{{ dataTable.footerRow[4] }}</th>
                     <th>{{ dataTable.headerRow[5] }}</th>
-                    <th class="text-right">{{ dataTable.footerRow[6] }}</th>
+                    <th>{{ dataTable.headerRow[6] }}</th>
+                    <th class="text-right">{{ dataTable.footerRow[7] }}</th>
                   </tr>
                 </tfoot>
                 <tbody>
@@ -66,6 +68,7 @@
                     <td>{{row[4]}}</td>
                     <td>{{row[5]}}</td>
                     <td>{{row[6]}}</td>
+                    <td>{{row[7]}}</td>
                     <td class="text-right">
                       <a href="javascript:void(0)" class="btn btn-link btn-info btn-just-icon like"
                         (click)="restoreProClick(row[0])" *ngIf="isDeletedView"><i

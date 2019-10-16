@@ -297,6 +297,37 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-12">
+                <div class="card text-center">
+                    <div class="card-header card-header-rose card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">mail_outline</i>
+                        </div>
+                        <h4 class="card-title">Color and Font Size Settings</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="#" action="#">
+                            <!-- <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Title" type="text" name="gt1" [(ngModel)]="grid1_title">
+                            </mat-form-field> -->
+                            <mat-form-field class="example-full-width">
+                                <input matInput [(colorPicker)]="banner_text_color" [cpPosition]="'bottom-left'" [style.background]="banner_text_color"
+                                    [cpOKButton]="true" />
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Font Size" type="number" name="fontSize"
+                                    [(ngModel)]="banner_font_size">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-footer ">
+                        <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                            (click)="setColorFontSize()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-6">
                 <div class="card text-center">
                     <div class="card-header card-header-rose card-header-icon">

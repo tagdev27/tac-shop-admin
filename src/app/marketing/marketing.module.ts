@@ -13,6 +13,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { MarketingRoutes } from './marketing.routing';
 import { BannersComponent } from './banners/banners.component';
 import { GiftMessagesComponent } from './gift-messages/gift-messages.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { GiftMessagesComponent } from './gift-messages/gift-messages.component';
     HttpClientModule,
     NgbModule.forRoot(),
     ClipboardModule, // required animations module
+    ColorPickerModule
   ],
   declarations: [
     BannersComponent,

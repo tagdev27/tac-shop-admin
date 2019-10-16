@@ -56,6 +56,9 @@ export class BannersComponent implements OnInit, OnDestroy {
     collection_image: string = './assets/img/image_placeholder.jpg'
 
     sidebar_image: string = './assets/img/image_placeholder.jpg'
+
+    banner_font_size = 0
+    banner_text_color = ''
     config = new AppConfig()
 
     ngOnInit() {
@@ -100,6 +103,8 @@ export class BannersComponent implements OnInit, OnDestroy {
             this.collection_image = (ban.collection_image != undefined) ? ban.collection_image : './assets/img/image_placeholder.jpg'
 
             this.sidebar_image = (ban.sidebar_image != undefined) ? ban.sidebar_image : './assets/img/image_placeholder.jpg'
+            this.banner_font_size = (ban.banner_font_size != undefined) ? ban.banner_font_size : 0
+            this.banner_text_color = (ban.banner_text_color != undefined) ? ban.banner_text_color : '#000000'
             //console.log(`this sidebar image = ${this.sidebar_image}`)
         })
     }
@@ -357,5 +362,18 @@ export class BannersComponent implements OnInit, OnDestroy {
             this.previewProgressSpinner.close()
             this.config.displayMessage(`${err}`, false)
         })
+    }
+
+    setColorFontSize() {
+        if(this.banner_font_size <= 10){
+            this.config.displayMessage("Font size must be greater than 10", false)
+            return
+        }
+        this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
+        const ban: Banners = {
+            banner_font_size: this.banner_font_size,
+            banner_text_color: this.banner_text_color
+        }
+        this.uploadValuesToBannerTable(ban)
     }
 }

@@ -46,7 +46,7 @@ export class ReviewsComponent implements OnInit, OnDestroy {
             query.forEach(async data => {
                 const rev = <Reviews>data.data()
                 const getPro = await this.getProductById(rev.product_id)
-                const pro = <Product>getPro.data()
+                const pro = <Product>getPro[0].data()
                 this.data.push([`${index}`, rev.id, pro.name, rev.name, rev.title, rev.text, `${rev.rating}`, rev.created_date, 'btn-link'])
                 index = index + 1
             })
@@ -58,8 +58,8 @@ export class ReviewsComponent implements OnInit, OnDestroy {
         });
     }
 
-    getProductById(id:any){
-        return firebase.firestore().collection('db').doc('tacadmin').collection('products').doc(id).get()
+    getProductById(id:number){
+        return firebase.firestore().collection('db').doc('tacadmin').collection('products').where('id', '==', id).get()
     }
 
     ngOnInit() {

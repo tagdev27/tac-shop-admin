@@ -119,7 +119,7 @@ export class SidebarComponent implements OnInit {
     access_level = '';
     service = new AdminUsersService();
 
-    stock_alerts:string[] = []
+    stock_alerts: string[] = []
     settings: StoreSettings
     config = new AppConfig()
     notification_size = 0
@@ -130,23 +130,39 @@ export class SidebarComponent implements OnInit {
 
     getProfile() {
         const email = localStorage.getItem('email');
-        this.service.getUserData(email).then(p => {
+        this.service.getUserData(email).then(async p => {
             if (p == null) {
-                this.service.getUserData(email).then(q => {
+                this.service.getUserData(email).then(async q => {
                     this.name = q.name;
                     this.image = q.image;
                     this.role = q.role;
-                    this.access_level = q.access_levels;
+                    if (q.role == 'Administrator') {
+                        this.access_level = q.access_levels;
+                    } else {
+                        const getRole = await this.getAccessLevelsUsingRoles(q.role)
+                        const vars = getRole.docs[0].data()
+                        this.access_level = vars['access_levels']
+                    }
                     this.displayNav();
                 })
             } else {
                 this.name = p.name;
                 this.image = p.image;
                 this.role = p.role;
-                this.access_level = p.access_levels;
+                if (p.role == 'Administrator') {
+                    this.access_level = p.access_levels;
+                } else {
+                    const getRole = await this.getAccessLevelsUsingRoles(p.role)
+                    const vars = getRole.docs[0].data()
+                    this.access_level = vars['access_levels']
+                }
                 this.displayNav();
             }
         })
+    }
+
+    async getAccessLevelsUsingRoles(role: string) {
+        return await firebase.firestore().collection('db').doc('tacadmin').collection('roles').where('name', '==', role).get()
     }
 
     logout() {
@@ -239,7 +255,7 @@ export class SidebarComponent implements OnInit {
             this.settings = <StoreSettings>snap.data()
             firebase.firestore().collection('db').doc('tacadmin').collection('items').where("stock_level", "<=", this.settings.stock_level).get().then(query => {
                 this.notification_size = query.size
-                if(query != null){
+                if (query != null) {
                     query.forEach(data => {
                         const item = <Items>data.data()
                         this.stock_alerts.push(`Item ${item.name} has ${item.stock_level} pieces left in stock`)
