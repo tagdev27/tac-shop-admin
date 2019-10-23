@@ -128,6 +128,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         //this.addNewCat2 = false
         this.editPro = false
         this.clearField()
+        this.jq()
     }
 
     getProducts() {
@@ -352,7 +353,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     }
 
     restoreProClick(_id: any) {
-        const id = `${this.products[_id].id}`
+        const id = `${this.products[_id].key}`
         const name = `${this.products[_id].name}`
         swal({
             title: 'Restore Alert',
@@ -387,7 +388,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     }
 
     deletePro(_id: any) {
-        const id = `${this.products[_id].id}`
+        const id = `${this.products[_id].key}`
         const name = `${this.products[_id].name}`
         swal({
             title: 'Delete Alert',
@@ -457,6 +458,10 @@ export class BasketComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
+        this.jq()
+    }
+
+    jq() {
         (<any>$('#datatables')).DataTable({
             "pagingType": "full_numbers",
             "lengthMenu": [

@@ -135,6 +135,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
         this.addNewCat = false
         this.addNewCat2 = false
         this.editCat = false
+        this.jqueryDataTable()
     }
 
     categorySubmitClicked() {
@@ -174,7 +175,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
         }
     }
 
-    uploadCatData(selectedMain: MainCategory[], url: string, desc: string, meta: string, name:string) {
+    uploadCatData(selectedMain: MainCategory[], url: string, desc: string, meta: string, name: string) {
         const key = firebase.database().ref().push().key
         const current_email = localStorage.getItem('email')
         const current_name = localStorage.getItem('name')
@@ -206,7 +207,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
     }
 
     restoreCatClick(cat: any) {
-        const id = `${cat[0]}`
+        const id = `${cat[1]}`
         swal({
             title: 'Restore Alert',
             text: 'Are you sure about restoring this sub-category?',
@@ -240,7 +241,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
     }
 
     deleteCat(cat: any) {
-        const id = `${cat[0]}`
+        const id = `${cat[1]}`
         swal({
             title: 'Delete Alert',
             text: 'Are you sure about deleting this sub-category?',
@@ -277,7 +278,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
         this.editCat = true
         this.addNewCat = true
         this.addNewCat2 = false
-        this.editMainCategory = cat[3]
+        this.editMainCategory = cat[4]
         this.currentCatRow = cat
     }
 
@@ -292,7 +293,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
             return
         }
 
-        if (name == `${this.currentCatRow[1]}` && desc == `${this.currentCatRow[2]}` && meta == `${this.currentCatRow[8]}` && image.length == 0 && this.editMainCategory == `${this.currentCatRow[3]}`) {
+        if (name == `${this.currentCatRow[2]}` && desc == `${this.currentCatRow[3]}` && meta == `${this.currentCatRow[9]}` && image.length == 0 && this.editMainCategory == `${this.currentCatRow[4]}`) {
             this.addNewCat = false
             this.addNewCat2 = false
             this.editCat = false
@@ -306,7 +307,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
 
         if (image.length == 0) {
             this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
-            const key = this.currentCatRow[0]
+            const key = this.currentCatRow[1]
             const current_email = localStorage.getItem('email')
             const current_name = localStorage.getItem('name')
 
@@ -337,7 +338,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
         const upload_task = firebase.storage().ref("sub-category").child(`${key}.jpg`)
 
         upload_task.put(image.item(0)).then(task => {
-            const key = this.currentCatRow[0]
+            const key = this.currentCatRow[1]
             const current_email = localStorage.getItem('email')
             const current_name = localStorage.getItem('name')
             upload_task.getDownloadURL().then(url => {
@@ -370,6 +371,10 @@ export class SubCatComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
+        this.jqueryDataTable()
+    }
+
+    jqueryDataTable() {
         //$.noConflict();
         (<any>$('#datatables')).DataTable({
             "pagingType": "full_numbers",

@@ -55,7 +55,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
 
     getOrders() {
-        firebase.firestore().collection('orders').onSnapshot(query => {
+        firebase.firestore().collection('orders').orderBy('timestamp', 'desc').onSnapshot(query => {
             this.data = []
             var index = 1
             query.forEach(async data => {
@@ -170,7 +170,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         if (query == 'all') {
             this.getOrders()
         } else {
-            firebase.firestore().collection('orders').where("status", "==", query).get().then(query => {
+            firebase.firestore().collection('orders').where("status", "==", query).orderBy('timestamp', 'desc').get().then(query => {
                 this.data = []
                 var index = 1
                 query.forEach(async data => {

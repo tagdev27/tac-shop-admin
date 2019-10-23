@@ -9,6 +9,7 @@ import { AboutComponent } from './about/about.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { TaxComponent } from './tax/tax.component';
+import { DeliveryComponent } from './delivery/delivery.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { TaxComponent } from './tax/tax.component';
     CurrencyComponent,
     ReviewsComponent,
     TaxComponent,
+    DeliveryComponent
   ]
 })
 

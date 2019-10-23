@@ -4,6 +4,7 @@ import { AboutComponent } from './about/about.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { TaxComponent } from './tax/tax.component';
+import { DeliveryComponent } from './delivery/delivery.component';
 
 
 export const StoreRoutes: Routes = [
@@ -30,5 +31,11 @@ export const StoreRoutes: Routes = [
             path: 'tax',
             component: TaxComponent
         }]
-    }
+    },{
+      path: '',
+      children: [ {
+          path: 'delivery',
+          component: DeliveryComponent
+      }]
+  }
 ];
