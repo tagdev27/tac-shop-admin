@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as firebase from "firebase";
 import { AdminUsers } from "./models/admin.users";
 import { UserIdleService } from 'angular-user-idle';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-my-app',
@@ -70,16 +71,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAu77RE_S5__DnrmaR1LKJvqtNNyR0mSzo",
-      authDomain: "taconlinegiftshop.firebaseapp.com",
-      databaseURL: "https://taconlinegiftshop.firebaseio.com",
-      projectId: "taconlinegiftshop",
-      storageBucket: "taconlinegiftshop.appspot.com",
-      messagingSenderId: "640531224553",
-      appId: "1:640531224553:web:1841f3f75b6240af"
-    };
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(environment.firebase);
 
     this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
       const body = document.getElementsByTagName('body')[0];

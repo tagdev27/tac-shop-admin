@@ -10,6 +10,7 @@ import { AppConfig } from "../../services/global.service";
 import * as $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs4';
+import { Product } from 'src/app/models/product';
 
 //declare var $: any;
 
@@ -62,6 +63,22 @@ export class SubCatComponent implements OnInit, OnDestroy {
         return <MainCategory>mainData.data()
     }
 
+    // doUpdatesOnDB() {
+    //     firebase.firestore().collection('db').doc('tacadmin').collection('products').get().then(query => {
+    //         var index = 0
+    //         query.forEach(async dt => {
+    //             const pro = <Product>dt.data()
+    //             let re = /\ /gi;
+    //             const url_path_name = pro.name.toLowerCase().replace(re, '-')
+    //             await firebase.firestore().collection('db').doc('tacadmin').collection('products').doc(pro.key).update({'menu_link':url_path_name})
+    //             // index = index + 1
+    //             // if(index == query.size){
+    //             //     console.log('all done')
+    //             // }
+    //         })
+    //     })
+    // }
+
     getCategories() {
         this.isDeletedView = false
         firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').onSnapshot(query => {
@@ -109,7 +126,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
     }
 
     getMainCategories() {
-        firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').onSnapshot(query => {
+        firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').get().then(query => {
             this.main_categories = []
             var index = 0
             query.forEach(data => {
@@ -179,6 +196,8 @@ export class SubCatComponent implements OnInit, OnDestroy {
         const key = firebase.database().ref().push().key
         const current_email = localStorage.getItem('email')
         const current_name = localStorage.getItem('name')
+        let re = /\ /gi;
+        const url_path_name = name.toLowerCase().replace(re, '-')
         const category: SubCategory = {
             id: key,
             main_category_id: selectedMain[0].id,
@@ -190,7 +209,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
             deleted: false,
             meta: meta,
             modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-            link: `/subcategory/${key}`,
+            link: url_path_name,
             merchant: 'tac'
         }
         firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').doc(key).set(category).then(d => {
@@ -305,6 +324,9 @@ export class SubCatComponent implements OnInit, OnDestroy {
             return item.name == mc
         })
 
+        let re = /\ /gi;
+        const url_path_name = name.toLowerCase().replace(re, '-')
+
         if (image.length == 0) {
             this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
             const key = this.currentCatRow[1]
@@ -317,6 +339,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
                 'description': desc,
                 'meta': meta,
                 'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                'link': url_path_name
             }).then(d => {
                 this.config.logActivity(`${current_name}|${current_email} updated this sub-category: ${name}`)
                 this.previewProgressSpinner.close()
@@ -349,6 +372,7 @@ export class SubCatComponent implements OnInit, OnDestroy {
                     'image': url,
                     'meta': meta,
                     'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                    'link': url_path_name
                 }).then(d => {
                     this.config.logActivity(`${current_name}|${current_email} updated this sub-category: ${name}`)
                     this.previewProgressSpinner.close()

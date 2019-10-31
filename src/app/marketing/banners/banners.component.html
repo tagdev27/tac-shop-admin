@@ -1,7 +1,48 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
+                <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-header card-header-rose card-header-icon">
+                                <div class="card-icon">
+                                    <i class="material-icons">mail_outline</i>
+                                </div>
+                                <h4 class="card-title">Social Tree Settings</h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <form method="#" action="#">
+                                    <legend>Social Tree Image (1920 x 718)</legend>
+                                    <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                        <div class="fileinput-new thumbnail">
+                                            <img src="{{social_tree_image}}" alt="...">
+                                        </div>
+                                        <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                        <div>
+                                            <span class="btn btn-rose btn-round btn-file">
+                                                <span class="fileinput-new">Select image</span>
+                                                <span class="fileinput-exists">Change</span>
+                                                <input type="file" name="..." id="socialtree" />
+                                            </span>
+                                            <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                                data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                        </div>
+                                    </div>
+                                    <!-- <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Title" type="text" name="st1" [(ngModel)]="slider1_title">
+                                    </mat-form-field>
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="SubTitle" type="text" name="sst1"
+                                            [(ngModel)]="slider1_subtitle">
+                                    </mat-form-field> -->
+                                </form>
+                            </div>
+                            <div class="card-footer ">
+                                <button mat-raised-button type="submit" class="btn btn-fill btn-rose"
+                                    (click)="setSocialTreeImage()">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+            <div class="col-md-3">
                 <div class="card text-center">
                     <div class="card-header card-header-rose card-header-icon">
                         <div class="card-icon">
@@ -42,7 +83,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card text-center">
                     <div class="card-header card-header-rose card-header-icon">
                         <div class="card-icon">
@@ -83,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card text-center">
                     <div class="card-header card-header-rose card-header-icon">
                         <div class="card-icon">

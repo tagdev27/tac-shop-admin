@@ -56,6 +56,7 @@ export class BannersComponent implements OnInit, OnDestroy {
     collection_image: string = './assets/img/image_placeholder.jpg'
 
     sidebar_image: string = './assets/img/image_placeholder.jpg'
+    social_tree_image: string = './assets/img/image_placeholder.jpg'
 
     banner_font_size = 0
     banner_text_color = ''
@@ -105,8 +106,35 @@ export class BannersComponent implements OnInit, OnDestroy {
             this.sidebar_image = (ban.sidebar_image != undefined) ? ban.sidebar_image : './assets/img/image_placeholder.jpg'
             this.banner_font_size = (ban.banner_font_size != undefined) ? ban.banner_font_size : 0
             this.banner_text_color = (ban.banner_text_color != undefined) ? ban.banner_text_color : '#000000'
+
+            this.social_tree_image = (ban.social_tree_image != undefined) ? ban.social_tree_image : './assets/img/image_placeholder.jpg'
             //console.log(`this sidebar image = ${this.sidebar_image}`)
         })
+    }
+
+    async setSocialTreeImage() {
+        const image = (<HTMLInputElement>document.getElementById("socialtree")).files
+        // if (this.slider1_title == '' || this.slider1_subtitle == '') {
+        //     this.config.displayMessage("Please enter all fields & select image for each setting", false)
+        //     return
+        // }
+        if (image.length == 0) {
+            if (this.social_tree_image.search("assets/img") > 0) {
+                this.config.displayMessage("Please select an image for each setting", false)
+                return
+            }
+        }
+        this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
+        const ban: Banners = {
+            social_tree_image: this.social_tree_image,
+        }
+        if (image.length > 0) {
+            const image_url = await this.uploadImageToFirebase(image)
+            ban.social_tree_image = image_url
+            this.uploadValuesToBannerTable(ban)
+        } else {
+            this.uploadValuesToBannerTable(ban)
+        }
     }
 
     async setSliderOne() {
@@ -365,7 +393,7 @@ export class BannersComponent implements OnInit, OnDestroy {
     }
 
     setColorFontSize() {
-        if(this.banner_font_size <= 10){
+        if (this.banner_font_size <= 10) {
             this.config.displayMessage("Font size must be greater than 10", false)
             return
         }

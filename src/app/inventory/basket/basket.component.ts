@@ -172,7 +172,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     }
 
     getMainCategories() {
-        firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').where("deleted", "==", false).onSnapshot(query => {
+        firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').where("deleted", "==", false).get().then(query => {
             this.main_categories = []
             var index = 0
             query.forEach(data => {
@@ -183,7 +183,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     }
 
     getItems() {
-        firebase.firestore().collection('db').doc('tacadmin').collection('items').where("deleted", "==", false).onSnapshot(query => {
+        firebase.firestore().collection('db').doc('tacadmin').collection('items').where("deleted", "==", false).get().then(query => {
             this.items = []
             var index = 0
             query.forEach(data => {
@@ -195,7 +195,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     }
 
     getSubCategoriesByID() {//main_cat_id:string .where("main_category_id", "==", main_cat_id)
-        firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').where("deleted", "==", false).onSnapshot(query => {
+        firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').where("deleted", "==", false).get().then(query => {
             this.sub_categories = []
             var index = 0
             query.forEach(data => {
@@ -216,7 +216,7 @@ export class BasketComponent implements OnInit, OnDestroy {
 
     async productSubmitClicked() {
         const image = (<HTMLInputElement>document.getElementById("pro_images")).files
-        if (this.basket_name == '' || this.basket_price == 0 || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 ) {//|| this.basket_items.length == 0
+        if (this.basket_name == '' || this.basket_price == 0 || this.basket_price == null || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 || this.basket_sale_price == null) {//|| this.basket_items.length == 0
             this.config.displayMessage("All fields marked with * are required", false)
             return
         }
@@ -234,8 +234,10 @@ export class BasketComponent implements OnInit, OnDestroy {
                 const id = this.randomInt(0, 9999999999)
                 const current_email = localStorage.getItem('email')
                 const current_name = localStorage.getItem('name')
+                let re = /\ /gi;
+                const url_path_name = this.basket_name.toLowerCase().replace(re, '-')
                 upload_task.getDownloadURL().then(async url => {
-                    const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${id}`, url)
+                    const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${url_path_name}`, url)
                     const product: Product = {
                         id: id,
                         key: key,
@@ -263,7 +265,7 @@ export class BasketComponent implements OnInit, OnDestroy {
                         created_by: `${current_name}|${current_email}`,
                         deleted: false,
                         modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                        menu_link: `/product/${id}`,
+                        menu_link: url_path_name,
                         dynamic_link: dynamic_link['shortLink'],
                         rating: 5.0,
                         merchant: 'tac'
@@ -289,14 +291,16 @@ export class BasketComponent implements OnInit, OnDestroy {
             })
         } else {//update
             var image_url = this.basket_image
+            let re = /\ /gi;
+            const url_path_name = this.basket_name.toLowerCase().replace(re, '-')
             if (image.length > 0) {
                 const key = firebase.database().ref().push().key
                 const upload_task = firebase.storage().ref("product").child(`${key}.jpg`)
                 upload_task.put(image.item(0)).then(task => {
                     upload_task.getDownloadURL().then(async url => {
                         image_url = url
-                        const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${this.currentProRow.id}`, image_url)
-                        this.updateValues(image_url, dynamic_link['shortLink'])
+                        const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${url_path_name}`, image_url)
+                        this.updateValues(image_url, dynamic_link['shortLink'], url_path_name)
                     }).catch(err => {
                         this.previewProgressSpinner.close()
                         this.config.displayMessage(`${err}`, false);
@@ -306,14 +310,14 @@ export class BasketComponent implements OnInit, OnDestroy {
                     this.config.displayMessage(`${err}`, false);
                 })
             } else {
-                const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${this.currentProRow.id}`, image_url)
-                this.updateValues(image_url, dynamic_link['shortLink'])
+                const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${url_path_name}`, image_url)
+                this.updateValues(image_url, dynamic_link['shortLink'], url_path_name)
             }
         }
 
     }
 
-    updateValues(image_url: string, dynamic_link:string) {
+    updateValues(image_url: string, dynamic_link:string, menuLink:string) {
         const product: Product = {
             name: this.basket_name,
             // price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
@@ -336,6 +340,8 @@ export class BasketComponent implements OnInit, OnDestroy {
             scheduled_sales_period: `${this.basket_sale_start_date}-${this.basket_sale_end_date}`,
             weight: this.basket_weight,
             modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+            menu_link: menuLink,
+            dynamic_link: dynamic_link,
         }
         const current_email = localStorage.getItem('email')
         const current_name = localStorage.getItem('name')
