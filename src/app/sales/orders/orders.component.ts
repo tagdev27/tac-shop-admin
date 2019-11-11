@@ -77,7 +77,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.getOrders()
+        this.getOrderByStatus('pending')
     }
 
     viewOrder(index: string) {
@@ -92,7 +92,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         var _index = 1
         this.data1 = []
         this.currentOrder.carts.forEach(item => {
-            this.data1.push([`${_index}`, item.product.pictures[0], item.product.name, `${this.currentOrder.currency_used}${item.product.price}`, `${item.quantity}`])
+            this.data1.push([`${_index}`, item.product.pictures[0], item.product.name, `₦${item.product.price}`, `${item.quantity}`])//${this.currentOrder.currency_used}
             _index = _index + 1
         })
         this.dataTable1 = {
