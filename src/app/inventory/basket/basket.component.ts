@@ -216,7 +216,7 @@ export class BasketComponent implements OnInit, OnDestroy {
 
     async productSubmitClicked() {
         const image = (<HTMLInputElement>document.getElementById("pro_images")).files
-        if (this.basket_name == '' || this.basket_price == 0 || this.basket_price == null || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 || this.basket_sale_price == null) {//|| this.basket_items.length == 0
+        if (this.basket_name == '' || this.basket_price == 0 || this.basket_price == null || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 || this.basket_sale_price == null || this.basket_discount == null) {//|| this.basket_items.length == 0
             this.config.displayMessage("All fields marked with * are required", false)
             return
         }
