@@ -5,6 +5,7 @@ import { StoreSettings } from "../../models/store";
 import { OverlayService } from '../../overlay/overlay.module';
 import { ProgressSpinnerComponent } from '../../progress-spinner/progress-spinner.module';
 import { Banners } from "src/app/models/banner";
+import { SubCategory } from "src/app/models/sub.category";
 
 
 @Component({
@@ -62,8 +63,13 @@ export class BannersComponent implements OnInit, OnDestroy {
     banner_text_color = ''
     config = new AppConfig()
 
+    slider_one_category: string
+    slider_two_category: string
+    sub_categories: SubCategory[] = []
+
     ngOnInit() {
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
+        this.getSubCategories()
         firebase.firestore().collection('db').doc('tacadmin').collection('settings').doc('banners').get().then(snap => {
             this.previewProgressSpinner.close()
             if (!snap.exists) {
@@ -108,8 +114,37 @@ export class BannersComponent implements OnInit, OnDestroy {
             this.banner_text_color = (ban.banner_text_color != undefined) ? ban.banner_text_color : '#000000'
 
             this.social_tree_image = (ban.social_tree_image != undefined) ? ban.social_tree_image : './assets/img/image_placeholder.jpg'
+
+            this.slider_one_category = (ban.slider_one_category != undefined) ? ban.slider_one_category : ''
+            this.slider_two_category = (ban.slider_two_category != undefined) ? ban.slider_two_category : ''
             //console.log(`this sidebar image = ${this.sidebar_image}`)
         })
+    }
+
+    getSubCategories() {//main_cat_id:string .where("main_category_id", "==", main_cat_id)
+        firebase.firestore().collection('db').doc('tacadmin').collection('sub-categories').where("deleted", "==", false).get().then(query => {
+            this.sub_categories = []
+            const all_param: SubCategory = {
+                id: 'all',
+                main_category_id: '',
+                name: 'All',
+                description: '',
+                created_date: '',
+                created_by: '',
+                image: '',
+                deleted: false,
+                meta: '',
+                modified_date: '',
+                link: 'all',
+                merchant: 'tac'
+            }
+            this.sub_categories.push(all_param)
+            var index = 0
+            query.forEach(data => {
+                const category = <SubCategory>data.data()
+                this.sub_categories.push(category)
+            })
+        });
     }
 
     async setSocialTreeImage() {
@@ -139,10 +174,10 @@ export class BannersComponent implements OnInit, OnDestroy {
 
     async setSliderOne() {
         const image = (<HTMLInputElement>document.getElementById("slider1")).files
-        if (this.slider1_title == '' || this.slider1_subtitle == '') {
-            this.config.displayMessage("Please enter all fields & select image for each setting", false)
-            return
-        }
+        // if (this.slider1_title == '' || this.slider1_subtitle == '') {
+        //     this.config.displayMessage("Please enter all fields & select image for each setting", false)
+        //     return
+        // }
         if (image.length == 0) {
             if (this.slider1_image.search("assets/img") > 0) {
                 this.config.displayMessage("Please enter all fields & select image for each setting", false)
@@ -154,6 +189,7 @@ export class BannersComponent implements OnInit, OnDestroy {
             slider1_subtitle: this.slider1_subtitle,
             slider1_title: this.slider1_title,
             slider1_image: this.slider1_image,
+            slider_one_category: this.slider_one_category
         }
         if (image.length > 0) {
             const image_url = await this.uploadImageToFirebase(image)
@@ -166,10 +202,10 @@ export class BannersComponent implements OnInit, OnDestroy {
 
     async setSliderTwo() {
         const image = (<HTMLInputElement>document.getElementById("slider2")).files
-        if (this.slider2_title == '' || this.slider2_subtitle == '') {
-            this.config.displayMessage("Please enter all fields & select image for each setting", false)
-            return
-        }
+        // if (this.slider2_title == '' || this.slider2_subtitle == '') {
+        //     this.config.displayMessage("Please enter all fields & select image for each setting", false)
+        //     return
+        // }
         if (image.length == 0) {
             if (this.slider2_image.search("assets/img") > 0) {
                 this.config.displayMessage("Please enter all fields & select image for each setting", false)
@@ -181,6 +217,7 @@ export class BannersComponent implements OnInit, OnDestroy {
             slider2_subtitle: this.slider2_subtitle,
             slider2_title: this.slider2_title,
             slider2_image: this.slider2_image,
+            slider_two_category: this.slider_two_category
         }
         if (image.length > 0) {
             const image_url = await this.uploadImageToFirebase(image)
@@ -301,10 +338,10 @@ export class BannersComponent implements OnInit, OnDestroy {
 
     async setParallax() {
         const image = (<HTMLInputElement>document.getElementById("parallax")).files
-        if (this.parallax_banner_title == '' || this.parallax_banner_sub_title == '' || this.parallax_banner_last_text == '') {
-            this.config.displayMessage("Please enter all fields & select image for each setting", false)
-            return
-        }
+        // if (this.parallax_banner_title == '' || this.parallax_banner_sub_title == '' || this.parallax_banner_last_text == '') {
+        //     this.config.displayMessage("Please enter all fields & select image for each setting", false)
+        //     return
+        // }
         if (image.length == 0) {
             if (this.parallax_banner_image.search("assets/img") > 0) {
                 this.config.displayMessage("Please enter all fields & select image for each setting", false)

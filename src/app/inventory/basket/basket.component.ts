@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import * as firebase from "firebase";
 import swal from 'sweetalert2';
 import { AdminUsers } from "../../models/admin.users";
@@ -37,6 +37,10 @@ export class BasketComponent implements OnInit, OnDestroy {
 
     constructor(private previewProgressSpinner: OverlayService, private http: HttpClient, private toast:ToastrService, private clip:ClipboardService) { }
 
+    @ViewChild('basketImage', {static: false}) basketImage: ElementRef; //referencing image tag from html
+    basketImage_natural_width:number
+    basketImage_natural_height:number
+
     public dataTable: DataTable;
     config = new AppConfig()
     data: string[][] = []
@@ -60,7 +64,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     basket_discount = 0
     basket_short_desc = ''
     basket_full_desc = ''
-    basket_stock = 0
+    basket_stock = 100
     basket_new = ''
     basket_sale = 'false'
     basket_category: string[] = []
@@ -68,7 +72,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     basket_sizes: string[] = ['M', 'L', 'XL']
     basket_tags: string[] = ['wine', 'basket', 'gift']
     basket_items: Item[] = []
-    basket_weight = 0
+    basket_weight = 50
     basket_sale_start_date = ''
     basket_sale_end_date = ''
     basket_dynamic_link = ''
@@ -105,6 +109,8 @@ export class BasketComponent implements OnInit, OnDestroy {
         this.basket_sale_start_date = ''
         this.basket_sale_end_date = ''
         this.basket_dynamic_link = ''
+        this.basketImage_natural_width = 0
+        this.basketImage_natural_height = 0
     }
 
     ngOnDestroy() {
@@ -214,6 +220,20 @@ export class BasketComponent implements OnInit, OnDestroy {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    onChange(evt:any){
+        const t = evt.target.files[0]
+        var imgSrc = ''
+        let fr = new FileReader();
+        fr.readAsDataURL(t)
+        fr.onload = () => {
+            imgSrc = fr.result.toString()
+            var i = new Image();
+            i.src = imgSrc;
+            this.basketImage_natural_width = i.width;
+            this.basketImage_natural_height = i.height;
+        }
+    }
+
     async productSubmitClicked() {
         const image = (<HTMLInputElement>document.getElementById("pro_images")).files
         if (this.basket_name == '' || this.basket_price == 0 || this.basket_price == null || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 || this.basket_sale_price == null || this.basket_discount == null) {//|| this.basket_items.length == 0
@@ -225,6 +245,16 @@ export class BasketComponent implements OnInit, OnDestroy {
             if (this.basket_image == '' || image.length == 0) {
                 this.previewProgressSpinner.close()
                 this.config.displayMessage("Please upload an image for this gift basket", false)
+                return
+            }
+            if(this.basketImage_natural_width != 736 || this.basketImage_natural_height != 1000){
+                this.previewProgressSpinner.close()
+                this.config.displayMessage("Wrong gift basket image dimension. Please use 736 by 1000 in pixels.", false)
+                return
+            }
+            if(image.item(0).size > 512000){
+                this.previewProgressSpinner.close()
+                this.config.displayMessage("Size of gift basket image must not be greater than 500KB.", false)
                 return
             }
             const key = firebase.database().ref().push().key
@@ -262,6 +292,7 @@ export class BasketComponent implements OnInit, OnDestroy {
                         scheduled_sales_period: `${this.basket_sale_start_date}-${this.basket_sale_end_date}`,
                         weight: this.basket_weight,
                         created_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                        created_timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         created_by: `${current_name}|${current_email}`,
                         deleted: false,
                         modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
@@ -294,6 +325,16 @@ export class BasketComponent implements OnInit, OnDestroy {
             let re = /\ /gi;
             const url_path_name = this.basket_name.toLowerCase().replace(re, '-')
             if (image.length > 0) {
+                if(this.basketImage_natural_width != 736 || this.basketImage_natural_height != 1000){
+                    this.previewProgressSpinner.close()
+                    this.config.displayMessage("Wrong gift basket image dimension. Please use 736 by 1000 in pixels.", false)
+                    return
+                }
+                if(image.item(0).size > 512000){
+                    this.previewProgressSpinner.close()
+                    this.config.displayMessage("Size of gift basket image must not be greater than 500KB.", false)
+                    return
+                }
                 const key = firebase.database().ref().push().key
                 const upload_task = firebase.storage().ref("product").child(`${key}.jpg`)
                 upload_task.put(image.item(0)).then(task => {

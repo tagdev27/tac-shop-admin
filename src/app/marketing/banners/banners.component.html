@@ -75,6 +75,13 @@
                                 <input matInput placeholder="SubTitle" type="text" name="sst1"
                                     [(ngModel)]="slider1_subtitle">
                             </mat-form-field>
+                            <mat-form-field>
+                                <mat-select placeholder="Shop Now Category *" [(ngModel)]="slider_one_category" name="bmc" ariaLabel="sub_categories[0]">
+                                    <mat-option *ngFor="let bd of sub_categories"[value]="bd.id">
+                                      {{bd.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </form>
                     </div>
                     <div class="card-footer ">
@@ -115,6 +122,13 @@
                             <mat-form-field class="example-full-width">
                                 <input matInput placeholder="SubTitle" type="text" name="sst2"
                                     [(ngModel)]="slider2_subtitle">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-select placeholder="Shop Now Category *" [(ngModel)]="slider_two_category" name="bmc" ariaLabel="sub_categories[0]">
+                                    <mat-option *ngFor="let bd of sub_categories"[value]="bd.id">
+                                      {{bd.name}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </form>
                     </div>

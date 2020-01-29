@@ -33,6 +33,7 @@ export interface Product {
   created_date?: string;
   modified_date?: string;
   created_by?: string;
+  created_timestamp?: any;
   dynamic_link?: string;
   menu_link?: string;
   deleted?: boolean;
