@@ -121,6 +121,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
             this.config.displayMessage("Please enter all fields and select an image", false)
             return
         }
+        if(image.item(0).size > 204800){
+            this.previewProgressSpinner.close()
+            this.config.displayMessage("Size of image must not be greater than 200KB.", false)
+            return
+        }
 
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
         const key = firebase.database().ref().push().key
@@ -280,6 +285,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
                 this.previewProgressSpinner.close()
                 this.config.displayMessage(`${err}`, false);
             })
+            return
+        }
+        if(image.item(0).size > 204800){
+            this.previewProgressSpinner.close()
+            this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }
 

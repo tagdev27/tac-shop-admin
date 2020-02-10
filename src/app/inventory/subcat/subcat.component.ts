@@ -166,6 +166,12 @@ export class SubCatComponent implements OnInit, OnDestroy {
             return
         }
 
+        if (image.item(0).size > 204800) {
+            this.previewProgressSpinner.close()
+            this.config.displayMessage("Size of image must not be greater than 200KB.", false)
+            return
+        }
+
         const mc = this.newMainCategory
         const selectedMain = this.main_categories.filter(function (item, index, array) {
             return item.name == mc
@@ -351,6 +357,12 @@ export class SubCatComponent implements OnInit, OnDestroy {
                 this.previewProgressSpinner.close()
                 this.config.displayMessage(`${err}`, false);
             })
+            return
+        }
+
+        if (image.item(0).size > 204800) {
+            this.previewProgressSpinner.close()
+            this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }
 

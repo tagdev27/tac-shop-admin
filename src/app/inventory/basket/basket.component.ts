@@ -252,9 +252,9 @@ export class BasketComponent implements OnInit, OnDestroy {
                 this.config.displayMessage("Wrong gift basket image dimension. Please use 736 by 1000 in pixels.", false)
                 return
             }
-            if(image.item(0).size > 512000){
+            if(image.item(0).size > 204800){
                 this.previewProgressSpinner.close()
-                this.config.displayMessage("Size of gift basket image must not be greater than 500KB.", false)
+                this.config.displayMessage("Size of gift basket image must not be greater than 200KB.", false)
                 return
             }
             const key = firebase.database().ref().push().key
@@ -330,9 +330,9 @@ export class BasketComponent implements OnInit, OnDestroy {
                     this.config.displayMessage("Wrong gift basket image dimension. Please use 736 by 1000 in pixels.", false)
                     return
                 }
-                if(image.item(0).size > 512000){
+                if(image.item(0).size > 204800){
                     this.previewProgressSpinner.close()
-                    this.config.displayMessage("Size of gift basket image must not be greater than 500KB.", false)
+                    this.config.displayMessage("Size of gift basket image must not be greater than 200KB.", false)
                     return
                 }
                 const key = firebase.database().ref().push().key

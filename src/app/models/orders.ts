@@ -26,34 +26,13 @@ export interface TacOrder {
     status: string
     total_amount: number
     shipping_details: any
-    other_payment_detals:any
+    other_payment_details:any
     gift_card_style: string
     tracking_details: Tracking[]
+    payment_gateway_fee:any
+    merchant_fee:any
+    payment_gateway_used:string
+    order_platform:string
+    payment_status:string
+    retry_url:string
 }
-
-
-// address
-// "20 Eyo Street Palmgroove"
-// card_message
-// "hello"
-// country
-// "Nigeria"
-// email
-// "gisanrinadetayo@gmail.com"
-// firstname
-// "ADETAYO"
-// fullname
-// "ADETAYO GISANRIN"
-// lastname
-// "GISANRIN"
-// phone
-// "8100865962"
-// recipientphone
-// "8100865962"
-// (string)
-// specialinstructions
-// ""
-// state
-// "Lagos"
-// town
-// "Somolu"

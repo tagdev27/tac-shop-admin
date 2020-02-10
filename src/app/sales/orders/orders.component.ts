@@ -61,12 +61,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
             query.forEach(async data => {
                 const order = <TacOrder>data.data()
                 this.all_orders.push(order)
-                this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, `${order.currency_used}${order.total_amount}`, order.created_date, 'btn-link'])
+                this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, order.payment_status, `${order.currency_used}${order.total_amount}`, order.created_date, 'btn-link'])
                 index = index + 1
             })
             this.dataTable = {
-                headerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Total Amount', 'Created Date', 'Actions'],
-                footerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Total Amount', 'Created Date', 'Actions'],
+                headerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Payment Status', 'Total Amount', 'Created Date', 'Actions'],
+                footerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Payment Status', 'Total Amount', 'Created Date', 'Actions'],
                 dataRows: this.data
             };
         });
@@ -176,12 +176,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
                 query.forEach(async data => {
                     const order = <TacOrder>data.data()
                     this.all_orders.push(order)
-                    this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, `${order.currency_used}${order.total_amount}`, order.created_date, 'btn-link'])
+                    this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, order.payment_status, `${order.currency_used}${order.total_amount}`, order.created_date, 'btn-link'])
                     index = index + 1
                 })
                 this.dataTable = {
-                    headerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Total Amount', 'Created Date', 'Actions'],
-                    footerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Total Amount', 'Created Date', 'Actions'],
+                    headerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Payment Status', 'Total Amount', 'Created Date', 'Actions'],
+                    footerRow: ['ID', 'Order Id', 'Email', 'Country', 'Status', 'Payment Status', 'Total Amount', 'Created Date', 'Actions'],
                     dataRows: this.data
                 };
             });
