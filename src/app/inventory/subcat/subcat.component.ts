@@ -166,8 +166,13 @@ export class SubCatComponent implements OnInit, OnDestroy {
             return
         }
 
+        const len = name.length
+        if (name.substring(len - 1) == ' ') {
+            this.config.displayMessage("Please remove all trailing whitespaces in name field", false)
+            return
+        }
+
         if (image.item(0).size > 204800) {
-            this.previewProgressSpinner.close()
             this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }
@@ -203,7 +208,9 @@ export class SubCatComponent implements OnInit, OnDestroy {
         const current_email = localStorage.getItem('email')
         const current_name = localStorage.getItem('name')
         let re = /\ /gi;
-        const url_path_name = name.toLowerCase().replace(re, '-')
+        const re2 = /\'/gi;
+        const re3 = /\//gi;
+        const url_path_name = name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
         const category: SubCategory = {
             id: key,
             main_category_id: selectedMain[0].id,
@@ -318,6 +325,12 @@ export class SubCatComponent implements OnInit, OnDestroy {
             return
         }
 
+        const len = name.length
+        if (name.substring(len - 1) == ' ') {
+            this.config.displayMessage("Please remove all trailing whitespaces in name field", false)
+            return
+        }
+
         if (name == `${this.currentCatRow[2]}` && desc == `${this.currentCatRow[3]}` && meta == `${this.currentCatRow[9]}` && image.length == 0 && this.editMainCategory == `${this.currentCatRow[4]}`) {
             this.addNewCat = false
             this.addNewCat2 = false
@@ -331,7 +344,9 @@ export class SubCatComponent implements OnInit, OnDestroy {
         })
 
         let re = /\ /gi;
-        const url_path_name = name.toLowerCase().replace(re, '-')
+        const re2 = /\'/gi;
+        const re3 = /\//gi;
+        const url_path_name = name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
 
         if (image.length == 0) {
             this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
@@ -361,7 +376,6 @@ export class SubCatComponent implements OnInit, OnDestroy {
         }
 
         if (image.item(0).size > 204800) {
-            this.previewProgressSpinner.close()
             this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }

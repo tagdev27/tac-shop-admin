@@ -37,7 +37,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
     currentCatRow: any
 
     selectedCategory: Items
-    selectedPrice:string
+    selectedPrice: string
     isDeletedView = false
 
     ngOnDestroy() {
@@ -124,8 +124,13 @@ export class ItemsComponent implements OnInit, OnDestroy {
             return
         }
 
-        if(image.item(0).size > 204800){
-            this.previewProgressSpinner.close()
+        const len = name.length
+        if (name.substring(len - 1) == ' ') {
+            this.config.displayMessage("Please remove all trailing whitespaces in name field", false)
+            return
+        }
+
+        if (image.item(0).size > 204800) {
             this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }
@@ -139,6 +144,13 @@ export class ItemsComponent implements OnInit, OnDestroy {
             const key = firebase.database().ref().push().key
             const current_email = localStorage.getItem('email')
             const current_name = localStorage.getItem('name')
+
+
+            let re = /\ /gi;
+            const re2 = /\'/gi;
+            const re3 = /\//gi;
+            const url_path_name = name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
+
             upload_task.getDownloadURL().then(url => {
                 const category: Items = {
                     id: key,
@@ -151,7 +163,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
                     stock_level: Number(stock),
                     price: Number(price),
                     modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                    link: `/item/${key}`,
+                    link: url_path_name,
                     merchant: 'tac'
                 }
                 firebase.firestore().collection('db').doc('tacadmin').collection('items').doc(key).set(category).then(d => {
@@ -175,7 +187,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
         })
     }
 
-    restoreCatClick(cat:any){
+    restoreCatClick(cat: any) {
         const id = `${cat[0]}`
         swal({
             title: 'Restore Alert',
@@ -263,12 +275,23 @@ export class ItemsComponent implements OnInit, OnDestroy {
             return
         }
 
+        const len = name.length
+        if (name.substring(len - 1) == ' ') {
+            this.config.displayMessage("Please remove all trailing whitespaces in name field", false)
+            return
+        }
+
         if (name == `${this.currentCatRow[1]}` && desc == `${this.currentCatRow[2]}` && price == `${this.selectedPrice}` && stock == `${this.currentCatRow[7]}` && image.length == 0) {
             this.addNewCat = false
             this.addNewCat2 = false
             this.editCat = false
             return
         }
+
+        let re = /\ /gi;
+        const re2 = /\'/gi;
+        const re3 = /\//gi;
+        const url_path_name = name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
 
         if (image.length == 0) {
             this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
@@ -280,8 +303,9 @@ export class ItemsComponent implements OnInit, OnDestroy {
                 'name': name,
                 'description': desc,
                 'stock_level': Number(stock),
-                'price':Number(price),
+                'price': Number(price),
                 'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                'link': url_path_name
             }).then(d => {
                 this.config.logActivity(`${current_name}|${current_email} updated this Item: ${name}`)
                 this.previewProgressSpinner.close()
@@ -296,8 +320,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
             return
         }
 
-        if(image.item(0).size > 204800){
-            this.previewProgressSpinner.close()
+        if (image.item(0).size > 204800) {
             this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }
@@ -318,8 +341,9 @@ export class ItemsComponent implements OnInit, OnDestroy {
                     'description': desc,
                     'image': url,
                     'stock_level': Number(stock),
-                    'price':Number(price),
+                    'price': Number(price),
                     'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                    'link': url_path_name
                 }).then(d => {
                     this.config.logActivity(`${current_name}|${current_email} updated this Item: ${name}`)
                     this.previewProgressSpinner.close()

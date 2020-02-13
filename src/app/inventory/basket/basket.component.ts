@@ -35,11 +35,11 @@ declare interface DataTable {
 
 export class BasketComponent implements OnInit, OnDestroy {
 
-    constructor(private previewProgressSpinner: OverlayService, private http: HttpClient, private toast:ToastrService, private clip:ClipboardService) { }
+    constructor(private previewProgressSpinner: OverlayService, private http: HttpClient, private toast: ToastrService, private clip: ClipboardService) { }
 
-    @ViewChild('basketImage', {static: false}) basketImage: ElementRef; //referencing image tag from html
-    basketImage_natural_width:number
-    basketImage_natural_height:number
+    @ViewChild('basketImage', { static: false }) basketImage: ElementRef; //referencing image tag from html
+    basketImage_natural_width: number
+    basketImage_natural_height: number
 
     public dataTable: DataTable;
     config = new AppConfig()
@@ -220,7 +220,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    onChange(evt:any){
+    onChange(evt: any) {
         const t = evt.target.files[0]
         var imgSrc = ''
         let fr = new FileReader();
@@ -240,6 +240,11 @@ export class BasketComponent implements OnInit, OnDestroy {
             this.config.displayMessage("All fields marked with * are required", false)
             return
         }
+        const len = this.basket_name.length
+        if (this.basket_name.substring(len - 1) == ' ') {
+            this.config.displayMessage("Please remove all trailing whitespaces in name field", false)
+            return
+        }
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
         if (!this.editPro) {//new add
             if (this.basket_image == '' || image.length == 0) {
@@ -247,12 +252,12 @@ export class BasketComponent implements OnInit, OnDestroy {
                 this.config.displayMessage("Please upload an image for this gift basket", false)
                 return
             }
-            if(this.basketImage_natural_width != 736 || this.basketImage_natural_height != 1000){
+            if (this.basketImage_natural_width != 736 || this.basketImage_natural_height != 1000) {
                 this.previewProgressSpinner.close()
                 this.config.displayMessage("Wrong gift basket image dimension. Please use 736 by 1000 in pixels.", false)
                 return
             }
-            if(image.item(0).size > 204800){
+            if (image.item(0).size > 204800) {
                 this.previewProgressSpinner.close()
                 this.config.displayMessage("Size of gift basket image must not be greater than 200KB.", false)
                 return
@@ -265,7 +270,9 @@ export class BasketComponent implements OnInit, OnDestroy {
                 const current_email = localStorage.getItem('email')
                 const current_name = localStorage.getItem('name')
                 let re = /\ /gi;
-                const url_path_name = this.basket_name.toLowerCase().replace(re, '-')
+                const re2 = /\'/gi;
+                const re3 = /\//gi;
+                const url_path_name = this.basket_name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
                 upload_task.getDownloadURL().then(async url => {
                     const dynamic_link = await this.createDynamicLink(`https://tacgifts.com/home/product/${url_path_name}`, url)
                     const product: Product = {
@@ -323,14 +330,16 @@ export class BasketComponent implements OnInit, OnDestroy {
         } else {//update
             var image_url = this.basket_image
             let re = /\ /gi;
-            const url_path_name = this.basket_name.toLowerCase().replace(re, '-')
+            const re2 = /\'/gi;
+            const re3 = /\//gi;
+            const url_path_name = this.basket_name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
             if (image.length > 0) {
-                if(this.basketImage_natural_width != 736 || this.basketImage_natural_height != 1000){
+                if (this.basketImage_natural_width != 736 || this.basketImage_natural_height != 1000) {
                     this.previewProgressSpinner.close()
                     this.config.displayMessage("Wrong gift basket image dimension. Please use 736 by 1000 in pixels.", false)
                     return
                 }
-                if(image.item(0).size > 204800){
+                if (image.item(0).size > 204800) {
                     this.previewProgressSpinner.close()
                     this.config.displayMessage("Size of gift basket image must not be greater than 200KB.", false)
                     return
@@ -358,7 +367,7 @@ export class BasketComponent implements OnInit, OnDestroy {
 
     }
 
-    updateValues(image_url: string, dynamic_link:string, menuLink:string) {
+    updateValues(image_url: string, dynamic_link: string, menuLink: string) {
         const product: Product = {
             name: this.basket_name,
             // price: (this.basket_sale == 'true') ? this.basket_sale_price : this.basket_price,
@@ -469,7 +478,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         })
     }
 
-    copyLink(_id:any){
+    copyLink(_id: any) {
         const link = `${this.products[_id].dynamic_link}`
         this.clip.copyFromContent(link)
         this.config.displayMessage(`${link} copied to clipboard`, true)

@@ -121,11 +121,20 @@ export class CategoryComponent implements OnInit, OnDestroy {
             this.config.displayMessage("Please enter all fields and select an image", false)
             return
         }
-        if(image.item(0).size > 204800){
-            this.previewProgressSpinner.close()
+        const len = name.length
+        if (name.substring(len - 1) == ' ') {
+            this.config.displayMessage("Please remove all trailing whitespaces in name field", false)
+            return
+        }
+        if (image.item(0).size > 204800) {
             this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }
+
+        let re = /\ /gi;
+        const re2 = /\'/gi;
+        const re3 = /\//gi;
+        const url_path_name = name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
 
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
         const key = firebase.database().ref().push().key
@@ -146,7 +155,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
                     deleted: false,
                     meta: meta,
                     modified_date: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
-                    link: `/collection/${key}`,
+                    link: url_path_name,
                     merchant: 'tac'
                 }
                 firebase.firestore().collection('db').doc('tacadmin').collection('main-categories').doc(key).set(category).then(d => {
@@ -170,7 +179,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         })
     }
 
-    restoreCatClick(cat:any){
+    restoreCatClick(cat: any) {
         const id = `${cat[0]}`
         swal({
             title: 'Restore Alert',
@@ -256,12 +265,23 @@ export class CategoryComponent implements OnInit, OnDestroy {
             return
         }
 
+        const len = name.length
+        if (name.substring(len - 1) == ' ') {
+            this.config.displayMessage("Please remove all trailing whitespaces in name field", false)
+            return
+        }
+
         if (name == `${this.currentCatRow[1]}` && desc == `${this.currentCatRow[2]}` && meta == `${this.currentCatRow[7]}` && image.length == 0) {
             this.addNewCat = false
             this.addNewCat2 = false
             this.editCat = false
             return
         }
+
+        let re = /\ /gi;
+        const re2 = /\'/gi;
+        const re3 = /\//gi;
+        const url_path_name = name.toLowerCase().replace(re, '-').replace(re2, '').replace(re3, '-')
 
         if (image.length == 0) {
             this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent)
@@ -274,6 +294,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
                 'description': desc,
                 'meta': meta,
                 'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                'link': url_path_name
             }).then(d => {
                 this.config.logActivity(`${current_name}|${current_email} updated this category: ${name}`)
                 this.previewProgressSpinner.close()
@@ -287,8 +308,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
             })
             return
         }
-        if(image.item(0).size > 204800){
-            this.previewProgressSpinner.close()
+        if (image.item(0).size > 204800) {
             this.config.displayMessage("Size of image must not be greater than 200KB.", false)
             return
         }
@@ -310,6 +330,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
                     'image': url,
                     'meta': meta,
                     'modified_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                    'link': url_path_name
                 }).then(d => {
                     this.config.logActivity(`${current_name}|${current_email} updated this category: ${name}`)
                     this.previewProgressSpinner.close()
