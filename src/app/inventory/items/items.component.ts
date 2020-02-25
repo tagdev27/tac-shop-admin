@@ -53,6 +53,15 @@ export class ItemsComponent implements OnInit, OnDestroy {
         // };
     }
 
+    formatNumbers(curr: string, value: number) {
+        const formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: (curr == '₦') ? 'NGN' : curr,
+          minimumFractionDigits: 2
+        })
+        return formatter.format(value)
+      }
+
     getCategories() {
         this.isDeletedView = false
         firebase.firestore().collection('db').doc('tacadmin').collection('items').onSnapshot(query => {
@@ -63,7 +72,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
                 const category = <Items>data.data()
                 this.categories.push(category)
                 if (!category.deleted) {
-                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, `${category.stock_level}`, `₦${category.price}`, category.modified_date, category.link, 'btn-link'])
+                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, `${category.stock_level}`, this.formatNumbers('₦', category.price), category.modified_date, category.link, 'btn-link'])
                 }
                 index = index + 1
             })
@@ -85,7 +94,7 @@ export class ItemsComponent implements OnInit, OnDestroy {
                 const category = <Items>data.data()
                 this.categories.push(category)
                 if (category.deleted) {
-                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, `${category.stock_level}`, `₦${category.price}`, category.modified_date, category.link, 'btn-link'])
+                    this.data.push([category.id, category.name, category.description, category.created_date, category.created_by, category.image, `${category.deleted}`, `${category.stock_level}`, this.formatNumbers('₦', category.price), category.modified_date, category.link, 'btn-link'])
                 }
                 index = index + 1
             })

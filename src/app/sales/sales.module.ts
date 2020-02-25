@@ -8,6 +8,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { TagInputModule } from 'ngx-chips';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ExportAsModule } from 'ngx-export-as';
  
 
 import { SalesRoutes } from './sales.routing';
@@ -24,6 +25,7 @@ import { OrdersComponent } from "./orders/orders.component";
     TagInputModule,
     HttpClientModule,
     ClipboardModule,
+    ExportAsModule,
     NgbModule.forRoot(), // required animations module
   ],
   declarations: [

@@ -14,6 +14,7 @@ import { Reviews } from 'src/app/models/review';
 import { TacOrder, Tracking } from 'src/app/models/orders';
 import { EmailBody } from "src/app/services/emailing";
 import { HttpClient } from '@angular/common/http';
+import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 
 //declare var $: any;
 
@@ -51,7 +52,16 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
     }
 
-    constructor(private previewProgressSpinner: OverlayService, private http: HttpClient) {
+    constructor(private previewProgressSpinner: OverlayService, private exportAsService: ExportAsService) {
+    }
+
+    formatNumbers(curr: string, value: number) {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: (curr == '₦') ? 'NGN' : curr,
+            minimumFractionDigits: 2
+        })
+        return formatter.format(value)
     }
 
     getOrders() {
@@ -61,7 +71,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
             query.forEach(async data => {
                 const order = <TacOrder>data.data()
                 this.all_orders.push(order)
-                this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, order.payment_status, `${order.currency_used}${order.total_amount}`, order.created_date, 'btn-link'])
+                this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, order.payment_status, this.formatNumbers(order.currency_used, order.total_amount), order.created_date, 'btn-link'])
                 index = index + 1
             })
             this.dataTable = {
@@ -92,7 +102,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         var _index = 1
         this.data1 = []
         this.currentOrder.carts.forEach(item => {
-            this.data1.push([`${_index}`, item.product.pictures[0], item.product.name, `₦${item.product.price}`, `${item.quantity}`])//${this.currentOrder.currency_used}
+            this.data1.push([`${_index}`, item.product.pictures[0], item.product.name, this.formatNumbers('₦', item.product.price), `${item.quantity}`])//${this.currentOrder.currency_used}
             _index = _index + 1
         })
         this.dataTable1 = {
@@ -170,13 +180,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
         if (query == 'all') {
             this.getOrders()
         } else {
-            firebase.firestore().collection('orders').where("status", "==", query).orderBy('timestamp', 'desc').get().then(query => {
+            firebase.firestore().collection('orders').where("status", "==", query).orderBy('timestamp', 'desc').onSnapshot(query => {
                 this.data = []
                 var index = 1
                 query.forEach(async data => {
                     const order = <TacOrder>data.data()
                     this.all_orders.push(order)
-                    this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, order.payment_status, `${order.currency_used}${order.total_amount}`, order.created_date, 'btn-link'])
+                    this.data.push([`${index}`, order.id, order.transaction_id, order.email, order.country, order.status, order.payment_status, this.formatNumbers(order.currency_used, order.total_amount), order.created_date, 'btn-link'])
                     index = index + 1
                 })
                 this.dataTable = {
@@ -241,5 +251,99 @@ export class OrdersComponent implements OnInit, OnDestroy {
         const table = (<any>$('#datatables')).DataTable();
 
         $('.card .material-datatables label').addClass('form-group');
+    }
+
+    resendInvoice() {
+        const order = this.currentOrder
+        this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
+        const curr = (order.currency_used == '₦') ? 'NGN' : order.currency_used
+        //send email automaticatlly
+        const billing_name = `${order.shipping_details['firstname']} ${order.shipping_details['lastname']}`
+
+        const currency_total_amount = this.formatNumbers(curr, order.total_amount)//`${curr}${order.total_amount}`
+        const trans_id = order.transaction_id
+
+        const shipping_details = `${order.shipping_details['fullname']}
+                          <br> ${order.shipping_details['address']}
+                          <br> ${order.shipping_details['state']}, ${order.shipping_details['country']}<br>
+                          Contact No. ${order.shipping_details['recipientphone']}`
+
+        const currency_shipping_fee = `${curr}0.00`//${this.OtherDetailsPayment['delivery']}`
+        const currency_tax_fee = `Tax Inclusive`//`${curr}${this.OtherDetailsPayment['tax']}`
+
+        var cart_items = ''
+        const exchangeR = order.conversion_rate
+
+        // this.cartService.getItems().subscribe(mCart => {
+        order.carts.forEach(cart => {
+            const unit_price = this.formatNumbers(curr, (cart.product.price / exchangeR)) //${curr}${(cart.product.price / exchangeR).toFixed(2)}
+            const sub_total_price = this.formatNumbers(curr, ((cart.product.price * cart.quantity) / exchangeR))//${curr}${((cart.product.price * cart.quantity) / exchangeR).toFixed(2)}
+            cart_items += `<tr>
+    <td width="50%"
+        class="m_-7433457280851606022ordered-item-label-td m_-7433457280851606022product"
+        style="padding-top:10px;padding-bottom:10px;border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;font-family:arial;font-size:12px;color:#333333;border-collapse:collapse">
+        ${cart.quantity} x ${cart.product.name} </td>
+    <td align="right" width="25%"
+        class="m_-7433457280851606022ordered-item-unit-price-td"
+        style="padding-top:10px;padding-bottom:10px;border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;font-family:arial;font-size:12px;color:#333333;border-collapse:collapse;text-align:right">
+        ${unit_price}
+    </td>
+    <td align="right" width="25%"
+        class="m_-7433457280851606022ordered-item-cost-td"
+        style="padding-top:10px;padding-bottom:10px;border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;font-family:arial;font-size:12px;color:#333333;border-collapse:collapse;text-align:right">
+        ${sub_total_price}
+    </td>
+    </tr>`
+        })
+        // })
+        const email_body = this.emailing.getInvoiceBody(order.created_date, billing_name, currency_total_amount, trans_id, shipping_details, currency_shipping_fee, currency_tax_fee, cart_items, `${order.track_id}`)
+        const email = order.shipping_details['email']
+        this.uploadPDFToFirebase(email_body, email, trans_id, billing_name, email_body)
+    }
+
+    async uploadPDFToFirebase(body: string, email: string, trans_id: string, billing_name: string, email_body: string): Promise<any> {
+        const key = firebase.database().ref().push().key
+        const pk = this.previewProgressSpinner
+        const conf = this.config
+        $("#thehtml").append(body)
+        const exportAsConfig: ExportAsConfig = {
+            type: 'pdf', // the type you want to download
+            fileName: `${key}.pdf`,
+            elementId: 'getbody', // the id of html/table element
+        }
+        this.exportAsService.get(exportAsConfig).subscribe(base => {
+            const upload_task = firebase.storage().ref("invoices").child(`${key}.pdf`)
+            this.exportAsService.contentToBlob(base).subscribe(async file => {
+                const put = await upload_task.put(file)
+                const url = await upload_task.getDownloadURL()
+                firebase.firestore().collection('invoices').doc(key).set({
+                    'id': key,
+                    'email': email,
+                    'invoice_id': trans_id,
+                    'created_date': `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                    'timestamp_date': firebase.firestore.FieldValue.serverTimestamp(),
+                    'invoice_url': url
+                }).then(done => {
+                    $(function () {
+                        $.ajax({
+                            url: `https://avidprintsconcierge.com/emailsending/send.php?sender_email=${email}&sender_name=${billing_name}`,
+                            type: "post",
+                            dataType: "html",
+                            success: function (data) {
+                                pk.close()
+                                conf.displayMessage(`Invoice successfully sent to: ${email}`, true)
+                            },
+                            error: function (err) {
+                                pk.close()
+                                conf.displayMessage(`Invoice successfully sent to: ${email}`, true)
+                            },
+                            data: {
+                                body: `${email_body}`
+                            }
+                        });
+                    });
+                })
+            })
+        })
     }
 }

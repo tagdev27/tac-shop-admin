@@ -98,7 +98,7 @@
                 <p class="h2">
                     <a href="javascript:void(0)" class="btn btn-link btn-danger btn-just-icon remove"
                         (click)="cancelView()"><i class="material-icons">arrow_back</i></a>TAC Order Overview ->
-                    {{currentOrder.currency_used}}{{currentOrder.total_amount}}
+                    {{formatNumbers(currentOrder.currency_used, currentOrder.total_amount)}}
                 </p>
                 <ngb-tabset [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills">
                     <ngb-tab title="BASIC INFORMATION">
@@ -178,6 +178,8 @@
                                                             </p>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="col-md-4 ml-auto">
                                                     <div class="info info-horizontal">
                                                         <div class="icon icon-info">
                                                             <i class="material-icons">check</i>
@@ -186,6 +188,17 @@
                                                             <h4 class="info-title">Retry Url</h4>
                                                             <p class="description">
                                                                 <a href="{{currentOrder.retry_url}}" target="_blank">click here for the url</a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info info-horizontal">
+                                                        <div class="icon icon-info">
+                                                            <i class="material-icons">check</i>
+                                                        </div>
+                                                        <div class="description">
+                                                            <h4 class="info-title">Resend Invoice</h4>
+                                                            <p class="description">
+                                                                <a href="javascript:void(0)" (click)="resendInvoice()">click here to resend invoice</a>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -355,7 +368,7 @@
                                                         <div class="description">
                                                             <h4 class="info-title">TAX PAID</h4>
                                                             <p class="description">
-                                                                {{currentOrder.currency_used}}{{currentOrder.other_payment_details.tax}}
+                                                                {{formatNumbers(currentOrder.currency_used, currentOrder.other_payment_details.tax)}}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -397,7 +410,7 @@
                                                         <div class="description">
                                                             <h4 class="info-title">PAYMENT GATEWAY FEE</h4>
                                                             <p class="description">
-                                                                {{currentOrder.currency_used}}{{currentOrder.payment_gateway_fee}}
+                                                                {{formatNumbers(currentOrder.currency_used, currentOrder.payment_gateway_fee)}}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -425,7 +438,7 @@
                                                         <div class="description">
                                                             <h4 class="info-title">MERCHANT FEE</h4>
                                                             <p class="description">
-                                                                {{currentOrder.currency_used}}{{currentOrder.merchant_fee}}
+                                                                {{formatNumbers(currentOrder.currency_used, currentOrder.merchant_fee)}}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -484,3 +497,5 @@
         </div>
     </div>
 </div>
+
+<div id="thehtml" style="display:none;"></div>

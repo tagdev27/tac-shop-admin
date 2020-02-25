@@ -25,7 +25,7 @@ export class CartComponent implements OnInit {
 
     public dataTable: DataTable;
     data: string[][] = []
-    carts:CartItem[] = []
+    carts: CartItem[] = []
     config = new AppConfig()
 
     ngOnInit() {
@@ -33,8 +33,17 @@ export class CartComponent implements OnInit {
     }
 
     //@ViewChild('user', { static: false }) private userContainer: ElementRef;
-    
-    constructor(private modalService: NgbModal, private previewProgressSpinner: OverlayService){
+
+    constructor(private modalService: NgbModal, private previewProgressSpinner: OverlayService) {
+    }
+
+    formatNumbers(curr: string, value: number) {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: (curr == '₦') ? 'NGN' : curr,
+            minimumFractionDigits: 2
+        })
+        return formatter.format(value)
     }
 
     getUsers() {
@@ -46,7 +55,7 @@ export class CartComponent implements OnInit {
                 const cart = <CartItem>data.data()
                 const product = cart.product
                 this.carts.push(cart)
-                this.data.push([`${index}`, product.pictures[0], product.name, `₦${product.price}`, `${cart.quantity}`, cart.email, cart.country, cart.created_date])
+                this.data.push([`${index}`, product.pictures[0], product.name, this.formatNumbers('₦', product.price), `${cart.quantity}`, cart.email, cart.country, cart.created_date])
                 index = index + 1
                 // data_index = data_index + 1
             })

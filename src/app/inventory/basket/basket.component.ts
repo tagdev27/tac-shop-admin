@@ -89,6 +89,15 @@ export class BasketComponent implements OnInit, OnDestroy {
         return ((this.basket_price - this.basket_sale_price) * 100) / this.basket_sale_price
     }
 
+    formatNumbers(curr: string, value: number) {
+        const formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: (curr == '₦') ? 'NGN' : curr,
+          minimumFractionDigits: 2
+        })
+        return formatter.format(value)
+      }
+
     clearField() {
         this.basket_image = './assets/img/image_placeholder.jpg'
         this.basket_name = ''
@@ -146,7 +155,7 @@ export class BasketComponent implements OnInit, OnDestroy {
             query.forEach(data => {
                 const pro = <Product>data.data()
                 this.products.push(pro)
-                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `₦${pro.salePrice}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link', pro.dynamic_link])
+                this.data.push([`${index}`, pro.pictures[0], pro.name, this.formatNumbers('₦', pro.price), this.formatNumbers('₦', pro.salePrice), `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link', pro.dynamic_link])
                 index = index + 1
             })
             this.dataTable = {
@@ -166,7 +175,7 @@ export class BasketComponent implements OnInit, OnDestroy {
             query.forEach(data => {
                 const pro = <Product>data.data()
                 this.products.push(pro)
-                this.data.push([`${index}`, pro.pictures[0], pro.name, `₦${pro.price}`, `₦${pro.salePrice}`, `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link'])
+                this.data.push([`${index}`, pro.pictures[0], pro.name, this.formatNumbers('₦', pro.price), this.formatNumbers('₦', pro.salePrice), `${pro.stock}`, pro.created_date, pro.modified_date, 'btn-link'])
                 index = index + 1
             })
             this.dataTable = {
