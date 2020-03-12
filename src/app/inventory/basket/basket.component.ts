@@ -67,6 +67,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     basket_stock = 100
     basket_new = ''
     basket_sale = 'false'
+    basket_pre_order = ''
     basket_category: string[] = []
     basket_colors: string[] = ['red', 'green', 'blue']
     basket_sizes: string[] = ['M', 'L', 'XL']
@@ -108,6 +109,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         this.basket_full_desc = ''
         this.basket_stock = 0
         this.basket_new = ''
+        this.basket_pre_order = ''
         this.basket_sale = 'false'
         this.basket_category = []
         this.basket_colors = ['red', 'green', 'blue']
@@ -245,7 +247,7 @@ export class BasketComponent implements OnInit, OnDestroy {
 
     async productSubmitClicked() {
         const image = (<HTMLInputElement>document.getElementById("pro_images")).files
-        if (this.basket_name == '' || this.basket_price == 0 || this.basket_price == null || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_sale == '' || this.basket_category.length == 0 || this.basket_sale_price == null || this.basket_discount == null) {//|| this.basket_items.length == 0
+        if (this.basket_name == '' || this.basket_price == 0 || this.basket_price == null || this.basket_short_desc == '' || this.basket_full_desc == '' || this.basket_stock == 0 || this.basket_new == '' || this.basket_pre_order == '' || this.basket_sale == '' || this.basket_category.length == 0 || this.basket_sale_price == null || this.basket_discount == null) {//|| this.basket_items.length == 0
             this.config.displayMessage("All fields marked with * are required", false)
             return
         }
@@ -299,6 +301,7 @@ export class BasketComponent implements OnInit, OnDestroy {
                         stock: this.basket_stock,
                         new: (this.basket_new == 'true') ? true : false,
                         sale: (this.basket_sale == 'true') ? true : false,
+                        pre_order: (this.basket_pre_order == 'true') ? true : false,
                         category: this.basket_category.join(','),
                         colors: this.basket_colors,
                         size: this.basket_sizes,
@@ -390,6 +393,7 @@ export class BasketComponent implements OnInit, OnDestroy {
             stock: this.basket_stock,
             new: (this.basket_new == 'true') ? true : false,
             sale: (this.basket_sale == 'true') ? true : false,
+            pre_order: (this.basket_pre_order == 'true') ? true : false,
             category: this.basket_category.join(","),
             colors: this.basket_colors,
             size: this.basket_sizes,
@@ -510,6 +514,7 @@ export class BasketComponent implements OnInit, OnDestroy {
         this.basket_stock = this.currentProRow.stock
         this.basket_new = (this.currentProRow.new) ? 'true' : 'false'
         this.basket_sale = (this.currentProRow.sale) ? 'true' : 'false'
+        this.basket_pre_order = (this.currentProRow.pre_order) ? 'true' : 'false'
         this.basket_category = this.currentProRow.category.split(",")
         this.basket_colors = this.currentProRow.colors
         this.basket_sizes = this.currentProRow.size

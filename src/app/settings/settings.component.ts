@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef , ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { RoleUsers } from "../models/role.users";
 import { AdminUsers } from "../models/admin.users";
 import { AdminUsersService } from "../services/admin-users.service";
@@ -22,11 +22,11 @@ declare interface TableData {
 })
 export class SettingsComponent implements OnInit {
 
-  focus1:any
+  focus1: any
   public tableData1: TableData;
   public tableData2: TableData;
   services = new AdminUsersService()
-  roles:RoleUsers[] = []
+  roles: RoleUsers[] = []
   config = new AppConfig()
   data: string[][] = [];
   data2: string[][] = [];
@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit {
 
   isAddRole = true
   currentRole: any = []
-  accountRole:string = ''
+  accountRole: string = ''
   currentUserEmail = ''
 
   display_users = true
@@ -44,7 +44,7 @@ export class SettingsComponent implements OnInit {
   @ViewChild('role', { static: false }) private roleContainer: ElementRef;
   @ViewChild('user', { static: false }) private userContainer: ElementRef;
 
-  constructor(private modalService: NgbModal, private router:Router, private previewProgressSpinner: OverlayService, private cdr: ChangeDetectorRef) { 
+  constructor(private modalService: NgbModal, private router: Router, private previewProgressSpinner: OverlayService, private cdr: ChangeDetectorRef) {
     this.tableData1 = {
       headerRow: ['#', 'Name', 'Access Levels', 'Actions'],
       dataRows: this.data
@@ -96,7 +96,7 @@ export class SettingsComponent implements OnInit {
 
   selectedValue: string;
   currentLevel: string[] = [];
-  blocked_status:string = '';
+  blocked_status: string = '';
   blocks_data = [
     { value: 'false', viewValue: 'False' },
     { value: 'true', viewValue: 'True' },
@@ -155,20 +155,20 @@ export class SettingsComponent implements OnInit {
     //   this.config.displayMessage("Invalid email address", false)
     //   return
     // }
-    const searchedRole = this.roles.filter(function (item, index, array){
+    const searchedRole = this.roles.filter(function (item, index, array) {
       return item.name == ar;
     })
     this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
     const key = firebase.database().ref().push().key
-    const reg_user:AdminUsers = {
-      id:key,
+    const reg_user: AdminUsers = {
+      id: key,
       access_levels: searchedRole[0].access_levels,
       blocked: false,
       email: email.toLowerCase(),
       image: 'https://tacadmin.firebaseapp.com/assets/img/default-avatar.png',
-      name:name,
-      position:position,
-      role:this.accountRole
+      name: name,
+      position: position,
+      role: this.accountRole
     }
     firebase.firestore().collection('db').doc('tacadmin').collection('users').doc(email.toLowerCase()).set(reg_user).then(d => {
       this.previewProgressSpinner.close()
@@ -181,7 +181,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  editUser(user:any){
+  editUser(user: any) {
     if (user[6] == 'Administrator') {
       this.config.displayMessage("This user can't be edited", false);
       return
@@ -190,25 +190,25 @@ export class SettingsComponent implements OnInit {
     this.blocked_status = user[8]
     this.accountRole = user[6]
     this.cdr.detectChanges()
-    setTimeout(()=>{
+    setTimeout(() => {
       this.open(this.userContainer, '', '')
     })
-    
+
   }
 
   userButtonAction() {
-    if(this.accountRole == '' || this.blocked_status == ''){
+    if (this.accountRole == '' || this.blocked_status == '') {
       this.config.displayMessage("All fields must be filled", false)
       return
     }
     this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
     const ar = this.accountRole
-    const searchedRole = this.roles.filter(function (item, index, array){
+    const searchedRole = this.roles.filter(function (item, index, array) {
       return item.name == ar;
     })
     firebase.firestore().collection('db').doc('tacadmin').collection('users').doc(this.currentUserEmail).update({
       'blocked': (this.blocked_status == 'true') ? true : false,
-      'role':ar,
+      'role': ar,
       'access_levels': searchedRole[0].access_levels
     }).then(d => {
       this.previewProgressSpinner.close()
@@ -223,7 +223,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  deleteUser(user:any) {
+  deleteUser(user: any) {
     if (user[6] == 'Administrator') {
       this.config.displayMessage("This role can't be deleted", false);
       return
@@ -267,7 +267,7 @@ export class SettingsComponent implements OnInit {
     this.currentRole = role
     this.currentLevel = role[3].split(",")
     this.cdr.detectChanges()
-    setTimeout(()=>{
+    setTimeout(() => {
       this.open(this.roleContainer, '', '')
     })
   }
@@ -311,7 +311,7 @@ export class SettingsComponent implements OnInit {
     this.currentRole = []
     this.currentLevel = []
     this.cdr.detectChanges()
-    setTimeout(()=>{
+    setTimeout(() => {
       this.open(this.roleContainer, '', '')
     })
   }
@@ -343,7 +343,7 @@ export class SettingsComponent implements OnInit {
       }).catch(err => {
         this.config.displayMessage(`${err}`, false);
       })
-    }else {
+    } else {
       this.button_pressed = true;
       const key = this.currentRole[1]
       const rolePush: RoleUsers = {

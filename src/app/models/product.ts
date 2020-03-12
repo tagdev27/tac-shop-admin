@@ -21,6 +21,7 @@ export interface Product {
   stock?: number;
   new?: boolean;
   sale?: boolean;
+  pre_order?: boolean;
   category?: string;
   colors?: string[];//ProductColor
   size?: string[];//ProductSize
