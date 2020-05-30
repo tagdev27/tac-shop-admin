@@ -127,7 +127,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         }
         this.previewProgressSpinner.open({ hasBackdrop: true }, ProgressSpinnerComponent);
         const name = `${this.currentOrder.shipping_details['firstname']}`
-        const email_body = this.emailing.getStatusEmailBody(this.currentOrder.transaction_id, name, this.current_status, this.status_note)
+        const email_body = this.emailing.getStatusEmailBody(this.currentOrder.transaction_id, name, this.current_status, this.status_note, this.currentOrder.carts[0].product.pictures[0])
         const tracking: Tracking[] = this.currentOrder.tracking_details
         tracking.push({
             icon: 'start',

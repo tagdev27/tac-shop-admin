@@ -1,6 +1,20 @@
 export class EmailBody {
 
-    getStatusEmailBody(order_id:string, name:string, status:string, note:string){
+    getStatusEmailBody(order_id:string, name:string, status:string, note:string, product_image:string){
+        //https://firebasestorage.googleapis.com/v0/b/taconlinegiftshop.appspot.com/o/promo%20images%2F_MG_2295e.jpg?alt=media&token=0007eca1-a469-47ce-b0ef-9deab2e19266
+        /**
+         * <tr>
+                                <td colspan="2">
+    
+                                    // <a href="https://tacgifts.com"
+                                    //     target="_blank"
+                                    //     data-saferedirecturl="https://www.google.com/url?q=https://tacgifts.com&amp;source=gmail&amp;ust=1563620188133000&amp;usg=AFQjCNFfHCzFxLGZ37H8tfUTGv6REOwa7Q"><img
+                                    //         width="600px"
+                                    //         src="https://firebasestorage.googleapis.com/v0/b/taconlinegiftshop.appspot.com/o/promo%20images%2F_MG_2295e.jpg?alt=media&token=0007eca1-a469-47ce-b0ef-9deab2e19266"
+                                    //         class="CToWUd"></a>
+                                </td>
+                            </tr>
+         */
         return `
         <table style="width:600px;border:17px solid #fbfcfc;margin-left:auto;margin-right:auto" bgcolor="#FBFCFC">
         <tbody>
@@ -23,7 +37,7 @@ export class EmailBody {
                         target="_blank"
                         data-saferedirecturl="https://www.google.com/url?q=https://tacgifts.com&amp;source=gmail&amp;ust=1563620188133000&amp;usg=AFQjCNHnHpiDVxR2cIm7BJ4DfpaLTT9tkw"><img
                             style="display:block;margin-left:auto;margin-right:auto" width="600"
-                            src="https://firebasestorage.googleapis.com/v0/b/taconlinegiftshop.appspot.com/o/promo%20images%2F_MG_2295e.jpg?alt=media&token=0007eca1-a469-47ce-b0ef-9deab2e19266"
+                            src="${product_image}"
                             alt="Confirmed order" class="CToWUd"></a></td>
             </tr>
     
@@ -95,17 +109,7 @@ export class EmailBody {
                             <tr>
                                 <td style="width:600px" bgcolor="#dc457e" height="2.5px" colspan="3"></td>
                             </tr>
-                            <tr>
-                                <td colspan="2">
-    
-                                    <a href="https://tacgifts.com"
-                                        target="_blank"
-                                        data-saferedirecturl="https://www.google.com/url?q=https://tacgifts.com&amp;source=gmail&amp;ust=1563620188133000&amp;usg=AFQjCNFfHCzFxLGZ37H8tfUTGv6REOwa7Q"><img
-                                            width="600px"
-                                            src="https://firebasestorage.googleapis.com/v0/b/taconlinegiftshop.appspot.com/o/promo%20images%2F_MG_2295e.jpg?alt=media&token=0007eca1-a469-47ce-b0ef-9deab2e19266"
-                                            class="CToWUd"></a>
-                                </td>
-                            </tr>
+                            <!-- removed from here -->
                         </tbody>
                     </table>
                 </td>
