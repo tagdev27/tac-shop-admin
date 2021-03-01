@@ -55,11 +55,11 @@ export const AppRoutes: Routes = [
                 canActivate: [RouteGuard],
                 loadChildren: './store/store.module#StoreModule'
             },
-            {
-                path: 'logs',
-                canActivate: [RouteGuard],
-                loadChildren: './logs/logs.module#LogsModule'
-            },
+//             {
+//                 path: 'logs',
+//                 canActivate: [RouteGuard],
+//                 loadChildren: './logs/logs.module#LogsModule'
+//             },
             {
                 path: 'users',
                 canActivate: [RouteGuard],
